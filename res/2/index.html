@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width'>
+<style>
+@media(min-width:600px){
+	table{scale:1.5;}
+}
+@keyframes slide{
+	from{right:1006px;}
+	to{right:6px;}
+}
+</style>
+</head>
+<body style="background-color:#e3e3e3; margin:0px; height:100vh; display:flex; justify-content:center; align-items:center;"></body>
+<script>
+canCastle=[true,true,true,true]; //roqueBrancoPequeno roqueBrancoGrande roquePretoPequeno roquePretoGrande
+selected=-1; //nenhuma peça selecionada
+lastMoved=-1; //último movimento
+humanPlayWhite=parseInt(Math.random()*2); //sorteia se o jogador comanda as peças brancas
+whiteTurn=true; //sempre são as brancas que começam
+
+board=[ //variável array que armazena o jogo! as brancas são as maiúsculas
+'r','n','b','q','k','b','n','r',
+'p','p','p','p','p','p','p','p',
+' ',' ',' ',' ',' ',' ',' ',' ',
+' ',' ',' ',' ',' ',' ',' ',' ',
+' ',' ',' ',' ',' ',' ',' ',' ',
+' ',' ',' ',' ',' ',' ',' ',' ',
+'P','P','P','P','P','P','P','P',
+'R','N','B','Q','K','B','N','R'
+];
+
+function isEmpty(o){return board[o]==' ';} //função que indica se o quadrado está vazio
+
+function isCapturable(o){ //função que indica se o quadrado contém uma peça que pode ser capturada
+	if(whiteTurn)return board[o]=='p'||board[o]=='n'||board[o]=='b'||board[o]=='r'||board[o]=='q';
+	if(!whiteTurn)return board[o]=='P'||board[o]=='N'||board[o]=='B'||board[o]=='R'||board[o]=='Q';
+}
+
+function promotePawns(){ //os peões que chegam do outro lado são promovidos
+	for(x=0;x<8;x++) //quadrados da primeira linha
+		if(board[x]=='P') //se tem um peão branco na primeira linha
+			board[x]='Q'; //promovido a rainha
+	for(x=56;x<64;x++) //quadrados da última linha
+		if(board[x]=='p') //se tem um peão preto na primeira linha
+			board[x]='q'; //promovido a rainha
+}
+
+function move(from,to){
+	board[to]=board[from];
+	board[from]=' ';
+
+	promotePawns(); //os peões que chegam do outro lado são promovidos
+
+	if(board[to]=="K"&&from==60&&to==62){ //roque branco pequeno
+		board[63]=' ';
+		board[61]='R';
+	}
+	if(board[to]=="K"&&from==60&&to==58){ //roque branco grande
+		board[56]=' ';
+		board[59]='R';
+	}
+	if(board[to]=="k"&&from==4&&to==6){ //roque preto pequeno
+		board[7]=' ';
+		board[5]='r';
+	}
+	if(board[to]=="k"&&from==4&&to==2){ //roque preto grande
+		board[0]=' ';
+		board[3]='r';
+	}
+}
+
+function pickSquare(square){ //função que é executada quando o user seleciona (click) algum quadrado
+	if(humanPlayWhite==whiteTurn&&whiteTurn&&(board[square]=='P'||board[square]=='N'||board[square]=='B'||board[square]=='R'||board[square]=='Q'||board[square]=='K'))selected=square;
+	if(humanPlayWhite==whiteTurn&&!whiteTurn&&(board[square]=='p'||board[square]=='n'||board[square]=='b'||board[square]=='r'||board[square]=='q'||board[square]=='k'))selected=square;
+
+	for(x=0;x<movesList.length;x++) //percorrendo a 'lista de jogadas válidas'
+		if(movesList[x][0]==selected&&movesList[x][1]==square){ //se o user clicou em um quadrado de uma jogada válida
+		move(selected,square);
+		selected=-1;
+		lastMoved=square;
+		whiteTurn=!whiteTurn;
+	}
+
+	main(); //redesenha o tabuleiro
+}
+
+function shuffleMoveList(){ //embaralha posições da lista de jogadas válidas
+	currentIndex=movesList.length;
+	while(currentIndex!=0){ //para todos itens do array
+		randomIndex=parseInt(Math.random()*currentIndex);
+		currentIndex--;
+		[movesList[currentIndex],movesList[randomIndex]]=[movesList[randomIndex],movesList[currentIndex]]; //troca a posição dos itens do array
+	}
+}
+
+function computerMove(){
+	shuffleMoveList(); //embaralha lista de jogadas
+
+	oponentMove=movesList[parseInt(Math.random()*movesList.length)]; //seleciona um movimento aleatório
+
+	for(x=movesList.length-1;x>-1;x--) //percorrendo a 'lista de jogadas válidas'
+		if(!isEmpty(movesList[x][1])) //se tem peça adversária no quadrado destino
+			if(board[movesList[x][0]]!="Q"&&board[movesList[x][0]]!="q"&&board[movesList[x][0]]!="R"&&board[movesList[x][0]]!="r") //se a peça que ataca não é rainha nem torre
+				oponentMove=movesList[x]; //esse movimento substitui o préviamente escolhido
+
+	for(x=movesList.length-1;x>-1;x--) //percorrendo a 'lista de jogadas válidas'
+		if(board[movesList[x][1]]=='B'||board[movesList[x][1]]=='b'||board[movesList[x][1]]=='N'||board[movesList[x][1]]=='n') //se tem bispo ou cavalo adversária no quadrado destino
+			if(board[movesList[x][0]]!="Q"&&board[movesList[x][0]]!="q"&&board[movesList[x][0]]!="R"&&board[movesList[x][0]]!="r") //se a peça que ataca não é rainha nem torre
+				oponentMove=movesList[x]; //esse movimento substitui o préviamente escolhido
+
+	for(x=movesList.length-1;x>-1;x--) //percorrendo a 'lista de jogadas válidas'
+		if(board[movesList[x][1]]=='R'||board[movesList[x][1]]=='r') //se tem torre adversária no quadrado destino
+			if(board[movesList[x][0]]!="Q"&&board[movesList[x][0]]!="q") //se a peça que ataca não é rainha
+				oponentMove=movesList[x]; //esse movimento substitui o préviamente escolhido
+
+	for(x=movesList.length-1;x>-1;x--) //percorrendo a 'lista de jogadas válidas'
+		if(board[movesList[x][1]]=='Q'||board[movesList[x][1]]=='q') //se tem rainha adversária no quadrado destino
+			oponentMove=movesList[x]; //esse movimento substitui o préviamente escolhido
+
+	move(oponentMove[0],oponentMove[1]);
+	whiteTurn=!whiteTurn;
+	lastMoved=oponentMove[1];
+	main();
+}
+
+function addPawnsMoves(){
+	if(whiteTurn){ //jogadas peões brancos
+		for(x=8;x<64;x++) //para todos quadrados
+			if(board[x]=='P'&&isEmpty(x-8)) //se está ocupado por um peão branco e o quadrado adiante está vazio
+				movesList.push([x,x-8]); //insere a jogada de andar um pra frente
+		for(x=48;x<56;x++) //para os quadrados na linha inicial de peões
+			if(board[x]=='P'&&isEmpty(x-8)&&isEmpty(x-16)) //se a casa está ocupada por um peão branco e os dois quadrados adiante estão vazios
+				movesList.push([x,x-16]); //insere a jogada de andar dois para frente
+		for(x=8;x<56;x++)
+			if(board[x]=='P'&&x%8!=7&&isCapturable(x-7)) //se tem alguma peça que o peão pode capturar na diagonal direita
+				movesList.push([x,x-7]); //insere a jogada de capturar à direita
+		for(x=8;x<56;x++)
+			if(board[x]=='P'&&x%8!=0&&isCapturable(x-9)) //se tem alguma peça que o peão pode capturar na diagonal esquerda
+				movesList.push([x,x-9]); //insere a jogada de capturar à esquerda
+	}
+	else{
+		//jogadas peões pretos
+		for(x=0;x<56;x++)
+			if(board[x]=='p'&&isEmpty(x+8))
+				movesList.push([x,x+8]);
+		for(x=8;x<16;x++)
+			if(board[x]=='p'&&isEmpty(x+8)&&isEmpty(x+16))
+				movesList.push([x,x+16]);
+		for(x=8;x<56;x++)
+			if(board[x]=='p'&&x%8!=0&&isCapturable(x+7))
+				movesList.push([x,x+7]);
+		for(x=8;x<56;x++)
+			if(board[x]=='p'&&x%8!=7&&isCapturable(x+9))
+				movesList.push([x,x+9]);
+	}
+}
+
+function addHorsesMoves(){
+	//jogadas cavalo
+	for(x=0;x<64;x++) //para todos quadrados
+		if((whiteTurn&&board[x]=='N')||(!whiteTurn&&board[x]=='n')){ //se o quadrado contém um cavalo
+			if(x>15&&x%8>0&&(isCapturable(x-17)||isEmpty(x-17))) //-17 é duas linhas pra cima e um quadrado à esquerda
+				movesList.push([x,x-17]); //insere na lista de jogadas
+			if(x>15&&x%8<7&&(isCapturable(x-15)||isEmpty(x-15))) //-15 é duas linhas pra cima e um quadrado à direita
+				movesList.push([x,x-15]);
+			if(x>7&&x%8>1&&(isCapturable(x-10)||isEmpty(x-10))) //-10 é uma linha acima e dois quadrados à esquerda
+				movesList.push([x,x-10]);
+			if(x>7&&x%8<6&&(isCapturable(x-6)||isEmpty(x-6)))  //-6 é uma linha acima e dois quadrados à direita
+				movesList.push([x,x-6]);
+			if(x<56&&x%8>1&&(isCapturable(x+6)||isEmpty(x+6)))  //6 é uma linha acima e dois quadrados à direita
+				movesList.push([x,x+6]);
+			if(x<56&&x%8<6&&(isCapturable(x+10)||isEmpty(x+10))) //10 é uma linha acima e dois quadrados à esquerda
+				movesList.push([x,x+10]);
+			if(x<48&&x%8>0&&(isCapturable(x+15)||isEmpty(x+15))) //15 é duas linhas pra cima e um quadrado à direita
+				movesList.push([x,x+15]);
+			if(x<48&&x%8<7&&(isCapturable(x+17)||isEmpty(x+17))) //17 é duas linhas pra cima e um quadrado à esquerda
+				movesList.push([x,x+17]);
+		}
+}
+
+function addBishopsMoves(){
+	//jogadas bispo/rainha
+	for(x=0;x<64;x++) //para todos quadrados
+		if((whiteTurn&&(board[x]=='B'||board[x]=='Q'))||(!whiteTurn&&(board[x]=='b'||board[x]=='q'))){ //se o quadrado contém um bispo ou uma rainha
+			for(t=x-9;t>-1&&t%8!=7&&(isEmpty(t)||isCapturable(t));t-=9){ //percorre a diagonal enquanto o quadrado for vazio ou contiver alguma peça capturável
+				movesList.push([x,t]); //insere na lista de jogadas
+				if(!isEmpty(t))break; //se o quadrado contém alguma peça, interrompe a procura nessa diagonal
+			}
+			for(t=x-7;t>-1&&t%8!=0&&(isEmpty(t)||isCapturable(t));t-=7){ //percorre a diagonal enquanto o quadrado for vazio ou contiver alguma peça capturável
+				movesList.push([x,t]);
+				if(!isEmpty(t))break;
+			}
+			for(t=x+7;t<64&&t%8!=7&&(isEmpty(t)||isCapturable(t));t+=7){
+				movesList.push([x,t]); //insere na lista de jogadas
+				if(!isEmpty(t))break;
+			}
+			for(t=x+9;t<64&&t%8!=0&&(isEmpty(t)||isCapturable(t));t+=9){
+				movesList.push([x,t]);
+				if(!isEmpty(t))break; //se o quadrado contém alguma peça, interrompe a procura nessa diagonal
+			}
+		}
+}
+
+function addRooksMoves(){
+	//jogadas torre/rainha
+	for(x=0;x<64;x++) //para todos quadrados
+		if((whiteTurn&&(board[x]=='R'||board[x]=='Q'))||(!whiteTurn&&(board[x]=='r'||board[x]=='q'))){ //se o quadrado contém uma torre ou uma rainha
+			for(t=x-1;t%8!=7&&(isEmpty(t)||isCapturable(t));t-=1){ //percorre a linha enquanto o quadrado for vazio ou contiver alguma peça capturável
+				movesList.push([x,t]); //insere na lista de jogadas
+				if(!isEmpty(t))break; //se o quadrado contém alguma peça, interrompe a procura nessa linha
+			}
+			for(t=x+1;t%8!=0&&(isEmpty(t)||isCapturable(t));t+=1){
+				movesList.push([x,t]); //insere na lista de jogadas
+				if(!isEmpty(t))break;
+			}
+			for(t=x-8;t>-1&&(isEmpty(t)||isCapturable(t));t-=8){ //percorre a coluna enquanto o quadrado for vazio ou contiver alguma peça capturável
+				movesList.push([x,t]);
+				if(!isEmpty(t))break;
+			}
+			for(t=x+8;t<64&&(isEmpty(t)||isCapturable(t));t+=8){
+				movesList.push([x,t]);
+				if(!isEmpty(t))break; //se o quadrado contém alguma peça, interrompe a procura nessa coluna
+			}
+		}
+}
+
+function addKingsMoves(){
+	//jogadas rei
+	for(x=0;x<64;x++) //para todos quadrados
+		if((whiteTurn&&board[x]=='K')||(!whiteTurn&&board[x]=='k')){ //se o quadrado contém o rei
+			if(x>7&&x%8>0&&(isCapturable(x-9)||isEmpty(x-9)))
+				movesList.push([x,x-9]); //rei na diagonal 1
+			if(x>7&&(isCapturable(x-8)||isEmpty(x-8)))
+				movesList.push([x,x-8]); //rei indo para frente
+			if(x>7&&x%8<7&&(isCapturable(x-7)||isEmpty(x-7)))
+				movesList.push([x,x-7]); //rei na diagonal 2
+			if(x%8>0&&(isCapturable(x-1)||isEmpty(x-1)))
+				movesList.push([x,x-1]); //rei indo para a esquerda
+			if(x%8<7&&(isCapturable(x+1)||isEmpty(x+1)))
+				movesList.push([x,x+1]); //rei indo parra a direita
+			if(x<56&&x%8>0&&(isCapturable(x+7)||isEmpty(x+7)))
+				movesList.push([x,x+7]); //rei na diagonal 3
+			if(x<56&&(isCapturable(x+8)||isEmpty(x+8)))
+				movesList.push([x,x+8]); //rei indo para trás
+			if(x<56&&x%8<7&&(isCapturable(x+9)||isEmpty(x+9)))
+				movesList.push([x,x+9]); //rei na diagonal 4
+		}
+}
+
+function addCastles(){
+	if(board[60]!='K'||board[63]!='R')canCastle[0]=false;
+	if(board[60]!='K'||board[56]!='R')canCastle[1]=false;
+	if(board[4]!='k'||board[7]!='r')canCastle[2]=false;
+	if(board[4]!='k'||board[0]!='r')canCastle[3]=false;
+	if(canCastle[0]&&whiteTurn&&isEmpty(61)&&isEmpty(62)&&board[60]=='K'&&board[63]=='R')movesList.push([60,62]); //roque branco pequeno
+	if(canCastle[1]&&whiteTurn&&isEmpty(59)&&isEmpty(58)&&isEmpty(57)&&board[60]=='K'&&board[56]=='R')movesList.push([60,58]); //roque branco grande
+	if(canCastle[2]&&!whiteTurn&&isEmpty(5)&&isEmpty(6)&&board[4]=='k'&&board[7]=='r')movesList.push([4,6]); //roque preto pequeno
+	if(canCastle[3]&&!whiteTurn&&isEmpty(3)&&isEmpty(2)&&isEmpty(1)&&board[4]=='k'&&board[0]=='r')movesList.push([4,2]); //roque preto grande
+}
+
+function discardInvalidMoves(){
+	backupBoard=[]; //é necessário criar uma cópia do tabuleiro para calcular as jogadas que deixam o rei em xeque
+	for(x=0;x<64;x++) //para todos quadrados
+		backupBoard[x]=board[x];
+
+	discardXeques=[]; //variável para desabilitar jogadas que deixariam o rei em xeque
+
+	for(m=0;m<movesList.length;m++){ //para todos movimentos na lista de jogadas
+		discardXeques[m]=movesList[m]; //uma por uma são testadas para verificar se é uma jogada válida
+
+		//'volta' o tabuleiro para verificar se essa jogada deixa o rei em xeque
+		for(x=0;x<64;x++)
+			board[x]=backupBoard[x];
+
+		move(movesList[m][0],movesList[m][1]); //muda a posição das peças para calcular se essa configuração deixa o rei em xeque
+
+		if(whiteTurn){
+			for(x=0;x<64;x++)if(board[x]=='K')king=x; //essa variável pega a posição do rei para calcular se ele fica em xeque
+
+			//procura por torre ou rainha em posição de atacar o rei
+			for(x=king-8;x>-1;x-=8){
+				if(board[x]=='q'||board[x]=='r')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+8;x<64;x+=8){
+				if(board[x]=='q'||board[x]=='r')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king-1;x>-1&&x%8!=7;x-=1){
+				if(board[x]=='q'||board[x]=='r')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+1;x<64&&x%8!=0;x+=1){
+				if(board[x]=='q'||board[x]=='r')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+
+			//procura por bispo ou rainha em posição de atacar o rei
+			for(x=king-9;x>-1&&x%8!=7;x-=9){
+				if(board[x]=='q'||board[x]=='b')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king-7;x>-1&&x%8!=0;x-=7){
+				if(board[x]=='q'||board[x]=='b')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+7;x<64&&x%8!=7;x+=7){
+				if(board[x]=='q'||board[x]=='b')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+9;x<64&&x%8!=0;x+=9){
+				if(board[x]=='q'||board[x]=='b')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+
+			//procura por rei adversário em posição de atacar o rei
+			if(king>7&&king%8>0&&board[king-9]=='k')discardXeques[m]=-1;
+			if(king>7&&board[king-8]=='k')discardXeques[m]=-1;
+			if(king>7&&king%8<7&&board[king-7]=='k')discardXeques[m]=-1;
+			if(king%8>0&&board[king-1]=='k')discardXeques[m]=-1;
+			if(king%8<7&&board[king+1]=='k')discardXeques[m]=-1;
+			if(king<56&&king%8>0&&board[king+7]=='k')discardXeques[m]=-1;
+			if(king<56&&board[king+8]=='k')discardXeques[m]=-1;
+			if(king<56&&king%8<7&&board[king+9]=='k')discardXeques[m]=-1;
+
+			//procura por cavalo adversário em posição de atacar o rei
+			if(king>15&&king%8>0&&board[king-17]=='n')discardXeques[m]=-1;
+			if(king>15&&king%8<7&&board[king-15]=='n')discardXeques[m]=-1;
+			if(king>7&&king%8>1&&board[king-10]=='n')discardXeques[m]=-1;
+			if(king>7&&king%8<6&&board[king-6]=='n')discardXeques[m]=-1;
+			if(king<56&&king%8>1&&board[king+6]=='n')discardXeques[m]=-1;
+			if(king<56&&king%8<6&&board[king+10]=='n')discardXeques[m]=-1;
+			if(king<48&&king%8>0&&board[king+15]=='n')discardXeques[m]=-1;
+			if(king<48&&king%8<7&&board[king+17]=='n')discardXeques[m]=-1;
+
+			//procura por peão adversário em posição de atacar o rei
+			if(king>7&&king%8>0&&board[king-9]=='p')discardXeques[m]=-1;
+			if(king>7&&king%8<7&&board[king-7]=='p')discardXeques[m]=-1;
+		}
+		if(!whiteTurn){
+			for(x=0;x<64;x++)if(board[x]=='k')king=x; //essa variável pega a posição do rei para calcular se ele fica em xeque
+
+			//procura por torre ou rainha em posição de atacar o rei
+			for(x=king-8;x>-1;x-=8){
+				if(board[x]=='Q'||board[x]=='R')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+8;x<64;x+=8){
+				if(board[x]=='Q'||board[x]=='R')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king-1;x>-1&&x%8!=7;x-=1){
+				if(board[x]=='Q'||board[x]=='R')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+1;x<64&&x%8!=0;x+=1){
+				if(board[x]=='Q'||board[x]=='R')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+
+			//procura por bispo ou rainha em posição de atacar o rei
+			for(x=king-9;x>-1&&x%8!=7;x-=9){
+				if(board[x]=='Q'||board[x]=='B')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king-7;x>-1&&x%8!=0;x-=7){
+				if(board[x]=='Q'||board[x]=='B')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+7;x<64&&x%8!=7;x+=7){
+				if(board[x]=='Q'||board[x]=='B')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+			for(x=king+9;x<64&&x%8!=0;x+=9){
+				if(board[x]=='Q'||board[x]=='B')discardXeques[m]=-1;
+				if(!isEmpty(x))break;
+			}
+
+			//procura por rei adversário em posição de atacar o rei
+			if(king>7&&king%8>0&&board[king-9]=='K')discardXeques[m]=-1;
+			if(king>7&&board[king-8]=='K')discardXeques[m]=-1;
+			if(king>7&&king%8<7&&board[king-7]=='K')discardXeques[m]=-1;
+			if(king%8>0&&board[king-1]=='K')discardXeques[m]=-1;
+			if(king%8<7&&board[king+1]=='K')discardXeques[m]=-1;
+			if(king<56&&king%8>0&&board[king+7]=='K')discardXeques[m]=-1;
+			if(king<56&&board[king+8]=='K')discardXeques[m]=-1;
+			if(king<56&&king%8<7&&board[king+9]=='K')discardXeques[m]=-1;
+
+			//procura por cavalo adversário em posição de atacar o rei
+			if(king>15&&king%8>0&&board[king-17]=='N')discardXeques[m]=-1;
+			if(king>15&&king%8<7&&board[king-15]=='N')discardXeques[m]=-1;
+			if(king>7&&king%8>1&&board[king-10]=='N')discardXeques[m]=-1;
+			if(king>7&&king%8<6&&board[king-6]=='N')discardXeques[m]=-1;
+			if(king<56&&king%8>1&&board[king+6]=='N')discardXeques[m]=-1;
+			if(king<56&&king%8<6&&board[king+10]=='N')discardXeques[m]=-1;
+			if(king<48&&king%8>0&&board[king+15]=='N')discardXeques[m]=-1;
+			if(king<48&&king%8<7&&board[king+17]=='N')discardXeques[m]=-1;
+
+			//procura por peão adversário em posição de atacar o rei
+			if(king<56&&king%8>0&&board[king+7]=='P')discardXeques[m]=-1;
+			if(king<56&&king%8<7&&board[king+9]=='P')discardXeques[m]=-1;
+		}
+	}
+
+	//agora que as jogadas que deixam o rei em xeque foram demarcadas com -1, volta o tabuleiro como estava antes
+	for(x=0;x<64;x++)
+		board[x]=backupBoard[x];
+
+	movesList=[]; //re-cria a lista de jogadas
+	for(m=0;m<discardXeques.length;m++) //percorre a lista de testados
+		if(discardXeques[m]!=-1) //se não foi marcada como inválida
+			movesList.push(discardXeques[m]); //adiciona a jogada à lista
+}
+
+function renderSquare(s){
+	if((s+parseInt(s/8))%2) //background do quadrado
+		bgtdcolor="404040"; //cinza escuro
+	else
+		bgtdcolor="c0c0c0"; //cinza claro
+
+	for(m=0;m<movesList.length;m++) //procurando na lista de jogadas válidas
+		if(selected==movesList[m][0]&&s==movesList[m][1]) //se o quadrado é um local válido  de concluir o movimento
+			bgtdcolor="1a73e8"; //azul escuro
+
+	htm+="<td style='width:42px; height:42px; background-color:#"+bgtdcolor+";'>"; //o quadrado
+	htm+="<div onclick='pickSquare("+s+");' style='width:32px; height:32px; margin:0px auto; text-align:center; font-size:22px; border-radius:50%; border:2px solid "; //o circulo dentro do quadrado
+
+	if(board[s]==' ')
+		htm+="transparent;'>&nbsp;"; //quadrado vazio
+	else{ //alguma peça dentro do quadrado
+		if(lastMoved==s) //último movimento do oponente
+			htm+="#bb4040; background-color:#808080;'>"; //cor da borda do círculo vermelha
+		else
+			if(selected==s) //quadrado selecionado
+				htm+="#40ff40; background-color:#808080;'>"; //cor da borda do círculo verde
+			else
+				htm+="#808080; background-color:#808080;'>"; //cor da borda do círculo igual a cor de dentro do círculo
+
+		switch(board[s]){
+			case 'p':htm+="&#9823;";break; // ♟ peao preto
+			case 'n':htm+="&#9822;";break; // ♞ cavalo preto
+			case 'b':htm+="&#9821;";break; // ♝ bispo preto
+			case 'r':htm+="&#9820;";break; // ♜ torre preto
+			case 'q':htm+="&#9819;";break; // ♛ rainha preto
+			case 'k':htm+="&#9818;";break; // ♚ rei preto
+			case 'P':htm+="&#9817;";break; // ♙ peao branco
+			case 'N':htm+="&#9816;";break; // ♘ cavalo branco
+			case 'B':htm+="&#9815;";break; // ♗ bispo branco
+			case 'R':htm+="&#9814;";break; // ♖ torre branco
+			case 'Q':htm+="&#9813;";break; // ♕ rainha branco
+			case 'K':htm+="&#9812;";break; // ♔ rei branco
+		}
+	}
+
+	htm+="</div>"; //o circulo dentro do quadrado
+	htm+="</td>"; //o quadrado
+}
+
+function boardWhiteAbove(){
+	htm="<table cellpadding=0 cellspacing=0 style='margin:30px;'>";
+	for(x=0;x<8;x++){ //se o player joga com as brancas o board é exibido com as brancas embaixo
+		htm+="<tr>";
+		for(y=0;y<8;y++)renderSquare((x*8)+y);
+		htm+="</tr>";
+	}
+	document.body.innerHTML=htm+"</table>";
+}
+
+function boardBlackAbove(){
+	htm="<table cellpadding=0 cellspacing=0 style='margin:30px;'>";
+	for(x=7;x>-1;x--){ //se o player joga com as brancas o board é exibido com as brancas embaixo
+		htm+="<tr>";
+		for(y=7;y>-1;y--)renderSquare((x*8)+y);
+		htm+="</tr>";
+	}
+	document.body.innerHTML=htm+"</table>";
+}
+
+function render(){
+	if(humanPlayWhite)
+		boardWhiteAbove(); //se o player joga com as brancas o board é exibido com as brancas embaixo
+	else
+		boardBlackAbove(); //se o player joga com as pretas o board é exibido com as pretas embaixo
+
+	if(movesList.length==0)document.body.innerHTML+="<button style='padding:10px; width:84px; position:absolute; bottom:6px; right:6px; animation:slide 1s;' onclick='location.reload();'>restart</button>";
+}
+
+function main(){
+	movesList=[]; //lista de jogadas possíveis
+	//a variável movesList é um array
+	//o comando push insere/adiciona algo no array
+
+	addPawnsMoves(); //adiciona as jogadas dos peões à 'lista de jogadas válidas'
+	addHorsesMoves(); //adiciona as jogadas dos cavalos à 'lista de jogadas válidas'
+	addBishopsMoves(); //adiciona as jogadas em diagonal à 'lista de jogadas válidas'
+	addRooksMoves(); //adiciona as jogadas (em linha e em coluna) à 'lista de jogadas válidas'
+	addKingsMoves(); //adiciona as jogadas do rei à 'lista de jogadas válidas'
+	addCastles(); //adiciona os roque à 'lista de jogadas válidas'
+
+	discardInvalidMoves();
+
+	if(humanPlayWhite!=whiteTurn&&movesList.length>0)
+		setTimeout(computerMove,500); //jogada aleatória daqui meio segundo
+
+	render();
+}
+
+main();
+
+//https://rodrigoschiomuniz.github.io/procedimentos/index.html?tutorial=2
+</script>
+</html>

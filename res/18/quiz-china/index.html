@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>Cotidiano na China</title>
+<meta name=viewport content='width=device-width'>
+<link rel="manifest" href="./manifest.json">
+<style>
+body{font-family:Arial;font-size:1.6em;background-image:url('background.png');background-color:#e3e3e3;margin:0px;height:100vh;display:flex;justify-content:center;align-items:center;}
+button{padding:10px;border:1px solid #ddd;border-radius:5px;cursor:pointer;background:#f6f6f6;font-size:1.2em;}
+button:hover{background:#e9e9e9;}
+.question-card{max-width:600px;background:white;padding:20px;border-radius:10px;border:1px solid #bbbbbb;}
+.correct{border:4px solid #a4edaa;}
+.wrong{border:1px solid #ff878a;}
+.correct:hover{background:#f6f6f6;}
+.wrong:hover{background:#f6f6f6;}
+#enunciado{padding-bottom:13px;border-bottom:1px solid #bebebe;}
+#hint{margin-top:12px;border-top:1px solid #bebebe;text-align:right;font-size:0.65em;}
+#options{display:flex;flex-direction:column;gap:10px;margin-top:16px;margin-bottom:16px;max-width:70%;}
+#reload{position:fixed;bottom:0px;right:0px;cursor:pointer;border:1px solid #777777;padding:6px 10px;background:#f6f6f6;font-size:0.6em;color:#333366;font-weight:bold;}
+#wrapper{padding:20px;}
+@keyframes entrada0{from{transform:rotateX(90deg);}to{transform:rotateX(0deg);}}
+@keyframes entrada1{from{transform:rotateY(90deg);}to{transform:rotateY(0deg);}}
+@keyframes entrada2{from{scale:.1;}to{scale:1;}}
+@keyframes entrada3{0%{opacity:0;}40%{opacity:1;}70%{opacity:0;}100%{opacity:1;}}
+@keyframes entrada4{from{margin-right:800px;transform:rotateZ(170deg);}to{margin-right:0px;transform:rotateZ(0deg);}}
+@keyframes entrada5{from{margin-left:800px;transform:rotateZ(190deg);}to{margin-left:0px;transform:rotateZ(360deg);}}
+@keyframes entrada6{from{scale:.3;transform:rotateZ(170deg);}to{scale:1;transform:rotateY(0deg);}}
+@keyframes entrada7{from{scale:.3;transform:rotateZ(190deg);}to{scale:1;transform:rotateY(360deg);}}
+</style>
+</head>
+<body onKeyDown="if(event.keyCode>50)pergunta();;"></body>
+<script>
+id=0;
+questions=[
+{q:(++id)+") Qual app é usado para pagamentos na China?",a:["百度","支付宝","微博"],c:1,t:"Alipay(Zhīfùbǎo)"},
+{q:(++id)+") Qual desses aplicativos você usaria para pagar quase tudo na China?",a:["百度","支付宝","微博"],c:1,t:"Alipay(Zhīfùbǎo)"},
+{q:(++id)+") Como se chama a 'comida para viagem' ou delivery,algo onipresente nas cidades chinesas?",a:["外卖","饭店","喝茶"],c:0,t:"Wàimài(Delivery)"},
+{q:(++id)+") Se você estiver no metrô de Pequim e quiser sair,qual placa você deve procurar?",a:["入口","出口","厕所"],c:1,t:"Chūkǒu(Saída)"},
+{q:(++id)+") Como você chama o motorista ao entrar em um táxi ou Didi?",a:["老师","医生","师傅"],c:2,t:"Shīfu(Mestre/Motorista)"},
+{q:(++id)+") Qual é a bebida que os chineses costumam carregar em garrafas térmicas e que é considerada essencial para a saúde?",a:["咖啡","热水","可乐"],c:1,t:"Rè shuǐ(Água quente)"},
+{q:(++id)+") Se você for ao mercado comprar frutas,qual destas é a 'Maçã'?",a:["苹果","香蕉","西瓜"],c:0,t:"Píngguǒ(Maçã)"},
+{q:(++id)+") Como se diz 'muito caro' ao tentar pechinchar em uma feira de rua?",a:["太贵了","便宜点","没关系"],c:0,t:"Tài guì le(Muito caro)"},
+{q:(++id)+") Qual é a principal unidade monetária usada no dia a dia?",a:["元","块","分"],c:1,t:"Kuài(Termo coloquial para dinheiro)"},
+{q:(++id)+") Ao chegar no aeroporto,você precisa passar pela imigração. Qual documento essencial você deve apresentar?",a:["护照","地图","手机"],c:0,t:"Hùzhào(Passaporte)"},
+{q:(++id)+") Você chegou cansado ao seu destino. Qual destes lugares é o seu 'Hotel'?",a:["餐厅","酒店","机场"],c:1,t:"Jiǔdiàn(Hotel)"},
+{q:(++id)+") No restaurante,se você quiser pedir a conta para o garçom,o que deve dizer?",a:["结账","你好","谢谢"],c:0,t:"Jiézhàng(Fechar a conta/Pagar)"},
+{q:(++id)+") Se você estiver perdido e precisar de um mapa,qual destes termos você deve procurar no seu aplicativo ou perguntar?",a:["书","地图","票"],c:1,t:"Dìtú(Mapa)"},
+{q:(++id)+") Você quer comprar uma passagem de trem. Qual caractere representa 'Ingresso' ou 'Bilhete'?",a:["钱","票","水"],c:1,t:"Piào(Bilhete/Ingresso)"},
+{q:(++id)+") Para se locomover entre cidades ou bairros distantes,você pode usar o 'Metrô'. Como se escreve?",a:["出租车","地铁","公共汽车"],c:1,t:"Dìtiě(Metrô)"},
+{q:(++id)+") Ao entrar em um quarto de hotel e perceber que falta 'Água',o que você pede?",a:["茶","水","米饭"],c:1,t:"Shuǐ(Água)"},
+{q:(++id)+") Qual destas saudações você usaria especificamente ao encontrar seu guia turístico pela manhã?",a:["早上好","晚安","再见"],c:0,t:"Zǎoshang hǎo(Bom dia)"},
+{q:(++id)+") Como se chama o delivery de comida?",a:["外卖","饭店","喝茶"],c:0,t:"Wàimài(Takeout)"},
+{q:(++id)+") O que procurar para sair do metrô?",a:["入口","出口","厕所"],c:1,t:"Chūkǒu(Saída/Exit)"},
+{q:(++id)+") Como chamar o motorista de táxi?",a:["老师","医生","师傅"],c:2,t:"Shīfu(Motorista/Mestre)"},
+{q:(++id)+") Bebida essencial(água quente):",a:["咖啡","热水","可乐"],c:1,t:"Rè shuǐ(Água quente)"},
+{q:(++id)+") Qual destes significa 'Passaporte'?",a:["护照","地图","手机"],c:0,t:"Hùzhào(Passaporte)"},
+{q:(++id)+") Como pedir a conta no restaurante?",a:["结账","你好","谢谢"],c:0,t:"Jiézhàng(Pedir a conta)"},
+{q:(++id)+") Termo para 'Trem de alta velocidade':",a:["高铁","飞机","出租车"],c:0,t:"Gāotiě(High-speed rail)"},
+{q:(++id)+") Onde você compra comida de rua?",a:["小吃街","办公室","学校"],c:0,t:"Xiǎochī jiē(Rua de petiscos)"},
+{q:(++id)+") Qual app é usado para quase todos os pagamentos na China?",a:["百度(Baidu)","支付宝(Alipay)","微博(Weibo)"],c:1,t:"支付宝(Zhīfùbǎo) - O Alipay é essencial para pagamentos."},
+{q:(++id)+") Como se chama o delivery de comida,onipresente nas cidades?",a:["外卖","饭店","喝茶"],c:0,t:"外卖(Wàimài) - Significa literalmente 'venda para fora'."},
+{q:(++id)+") No metrô,qual placa indica a 'Saída'?",a:["入口","出口","厕所"],c:1,t:"出口(Chūkǒu) - Chū(sair) + kǒu(boca/abertura)."},
+{q:(++id)+") Como você chama educadamente um motorista de táxi ou Didi?",a:["老师","医生","师傅"],c:2,t:"师傅(Shīfu) - Termo respeitoso para mestres ou profissionais de ofício."},
+{q:(++id)+") Qual bebida os chineses costumam carregar em garrafas térmicas?",a:["咖啡","热水","可乐"],c:1,t:"热水(Rè shuǐ) - Água quente é considerada fundamental para a saúde."},
+{q:(++id)+") Se for ao mercado comprar frutas,qual destas é a 'Maçã'?",a:["苹果","香蕉","西瓜"],c:0,t:"苹果(Píngguǒ) - Maçã."},
+{q:(++id)+") Como se diz 'muito caro' ao pechinchar?",a:["太贵了","便宜点","没关系"],c:0,t:"太贵了(Tài guì le) - Essencial para negociar em mercados."},
+{q:(++id)+") Qual é a gíria comum para a unidade monetária(dinheiro) no dia a dia?",a:["元","块","分"],c:1,t:"块(Kuài) - É o termo coloquial para o Renminbi(Yuan)."},
+{q:(++id)+") Qual documento essencial você apresenta na imigração?",a:["护照","地图","手机"],c:0,t:"护照(Hùzhào) - Passaporte."},
+{q:(++id)+") Você chegou cansado ao seu destino. Qual destes é o 'Hotel'?",a:["餐厅","酒店","机场"],c:1,t:"酒店(Jiǔdiàn) - Literalmente 'estabelecimento de bebida',usado para hotéis."},
+{q:(++id)+") No restaurante,como você pede a conta?",a:["结账","你好","谢谢"],c:0,t:"结账(Jiézhàng) - Fechar a conta."},
+{q:(++id)+") Se precisar de um mapa,o que você procura?",a:["书","地图","票"],c:1,t:"地图(Dìtú) - Mapa."},
+{q:(++id)+") Qual caractere representa 'Ingresso' ou 'Bilhete'?",a:["钱","票","水"],c:1,t:"票(Piào) - Bilhete para trem,cinema,etc."},
+{q:(++id)+") Como se diz 'Metrô' em chinês?",a:["出租车","地铁","公共汽车"],c:1,t:"地铁(Dìtiě) - Ferrovia subterrânea."},
+{q:(++id)+") Qual é a saudação específica para dar 'Bom dia'?",a:["早上好","晚安","再见"],c:0,t:"早上好(Zǎoshang hǎo) - Bom dia."},
+{q:(++id)+") Termo para 'Trem de alta velocidade'(Bala):",a:["高铁","飞机","出租车"],c:0,t:"高铁(Gāotiě) - A rede de alta velocidade da China."},
+{q:(++id)+") Onde você encontra diversas comidas de rua típicas?",a:["小吃街","办公室","学校"],c:0,t:"小吃街(Xiǎochī jiē) - Rua de lanches/petiscos."},
+{q:(++id)+") Qual o nome da rede social e super-app mais usado na China para tudo?",a:["微信","脸书","推特"],c:0,t:"Wēixìn(WeChat)"},
+{q:(++id)+") Se você quiser dizer 'obrigado',o que você diz?",a:["对不起","谢谢","没关系"],c:1,t:"Xièxiè(Obrigado)"},
+{q:(++id)+") Como se diz 'olá' de forma comum?",a:["你好","再见","对不起"],c:0,t:"Nǐ hǎo(Olá)"},
+{q:(++id)+") Como você pede 'cerveja' em um bar ou restaurante?",a:["牛奶","啤酒","果汁"],c:1,t:"Píjiǔ(Cerveja)"},
+{q:(++id)+") Ao entrar em uma loja,como o atendente costuma te receber?",a:["欢迎光临","走吧","不可以"],c:0,t:"Huānyíng guānglín(Bem-vindo)"},
+{q:(++id)+") Qual desses é o prato mais famoso de Pequim?",a:["烤鸭","火锅","饺子"],c:0,t:"Kǎoyā(Pato de Pequim)"},
+{q:(++id)+") Como se chama o 'dinheiro vivo' ou papel moeda?",a:["现金","刷卡","微信支付"],c:0,t:"Xiànjīn(Dinheiro vivo)"},
+{q:(++id)+") Se você precisar de um banheiro,o que deve perguntar?",a:["洗手间","飞机场","火车站"],c:0,t:"Xǐshǒujiān(Banheiro/Toalete)"},
+{q:(++id)+") Qual o meio de transporte de duas rodas mais comum nas ruas chinesas(alugado por app)?",a:["汽车","自行车","飞机"],c:1,t:"Zìxíngchē(Bicicleta)"},
+{q:(++id)+") Como se diz 'Eu não entendo' ao ouvir algo em chinês?",a:["我知道","听不懂","我不买"],c:1,t:"Tīng bù dǒng(Ouço,mas não entendo)"},
+{q:(++id)+") Qual é o termo usado para 'arroz cozido'?",a:["面条","米饭","包子"],c:1,t:"Mǐfàn(Arroz cozido)"},
+{q:(++id)+") Se você quer pedir para o motorista 'parar o carro',o que diz?",a:["停车","开车","快点"],c:0,t:"Tíngchē(Parar o carro)"},
+{q:(++id)+") Como se refere a 'China' em chinês?",a:["日本","中国","韩国"],c:1,t:"Zhōngguó(País do Meio / China)"},
+{q:(++id)+") Qual o termo para 'café'?",a:["茶","咖啡","水"],c:1,t:"Kāfēi(Café)"},
+{q:(++id)+") Como você diz 'tchau' ou 'até logo'?",a:["再见","你好","对不起"],c:0,t:"Zàijiàn(Adeus / Ver novamente)"},
+{q:(++id)+") Ao fazer compras online(Taobao),como você chama o atendente no chat?",a:["老板","亲","朋友"],c:1,t:"Qīn(Abreviação de 'querido' - padrão no e-commerce chinês)"},
+{q:(++id)+") Qual o termo para o 'código QR',usado para tudo na China?",a:["二维码","数字码","手机号"],c:0,t:"Èrwéimǎ(Código QR)"},
+{q:(++id)+") Como se chama o conceito de 'conexões sociais/influência' fundamental na China?",a:["关系","面子","礼貌"],c:0,t:"Guānxì(Rede de relacionamentos/influência)"},
+{q:(++id)+") Se alguém te diz 'Mǎshàng'(马上),o que ela quer dizer?",a:["Longe","Imediatamente/Em breve","Nunca"],c:1,t:"Mǎshàng(Literalmente 'em cima do cavalo',significa 'agora mesmo')"},
+{q:(++id)+") Qual o termo para o 'Grande Firewall' que bloqueia sites estrangeiros?",a:["防火墙","互联网","局域网"],c:0,t:"Fánghuǒqiáng(Firewall)"},
+{q:(++id)+") Como se chama o café da manhã tradicional de Cantão com chá e pequenos pratos?",a:["早茶","午饭","夜宵"],c:0,t:"Zǎochá(Chá da manhã / Dim Sum)"},
+{q:(++id)+") Qual desses é o termo para 'Power Bank'(carregador portátil),vital nas cidades?",a:["充电宝","电池","发电机"],c:0,t:"Chōngdiànbǎo(Tesouro de carregamento)"},
+{q:(++id)+") O que significa o conceito de 'Mianzi'(面子)?",a:["Fome","Rosto/Honra social","Dinheiro"],c:1,t:"Miànzi(Ter 'rosto' ou prestígio perante os outros)"},
+{q:(++id)+") Como se chama o festival que causa a maior migração humana do mundo anualmente?",a:["中秋节","春节","端午节"],c:1,t:"Chūnjié(Festival da Primavera / Ano Novo Chinês)"},
+{q:(++id)+") Se você quer a 'nota fiscal oficial'(para reembolso da empresa),o que pede?",a:["发票","收据","菜单"],c:0,t:"Fāpiào(Nota fiscal oficial tributável)"},
+{q:(++id)+") Qual o nome da plataforma de vídeos curtos que deu origem ao TikTok?",a:["小红书","抖音","快手"],c:1,t:"Dǒuyīn(Versão chinesa do TikTok)"},
+{q:(++id)+") O que os jovens chineses querem dizer com 'Dǎkǎ'(打卡) em um lugar turístico?",a:["Bater o ponto/Registrar presença","Pagar a conta","Lutar"],c:0,t:"Dǎkǎ(Ato de visitar um lugar famoso apenas para postar fotos)"},
+{q:(++id)+") Como se chama o sistema de registro residencial que limita acesso a serviços públicos?",a:["户口","签证","身份证"],c:0,t:"Hùkǒu(Sistema de registro de domicílio)"},
+{q:(++id)+") Qual o termo para 'Estrangeiro'(muitas vezes usado de forma coloquial)?",a:["老外","老外婆","外国人"],c:0,t:"Lǎowài(Estrangeiro - literal:'Velho de fora')"},
+{q:(++id)+") Como se chama a 'água da torneira'(que geralmente não é potável na China)?",a:["自来水","矿泉水","纯净水"],c:0,t:"Zìláishuǐ(Água corrente/da torneira)"},
+{q:(++id)+") Como se chama o 'leito de pedra/tijolo aquecido' comum em casas do norte da China?",a:["沙发","炕","床"],c:1,t:"Kàng (Cama de alvenaria aquecida por baixo,essencial no inverno rural)"},
+{q:(++id)+") Qual o termo para os 'jovens que retornam da cidade grande' para empreender no campo?",a:["海龟","返乡青年","外卖员"],c:1,t:"Fǎnxiāng qīngnián (Jovens que abandonam as metrópoles para revitalizar cidades menores)"},
+{q:(++id)+") Como são chamadas as 'vovós' que cuidam da vizinhança e fofocam nas cidades pequenas?",a:["大妈","小姐姐","老师"],c:0,t:"Dàmā (Termo para senhoras,muitas vezes as 'guardiãs' da moral local e rainhas da dança de praça)"},
+{q:(++id)+") Nas cidades menores,o que é o 'Cǎilǐ' (彩礼) pago antes do casamento?",a:["Bolo de noiva","Dote/Preço da noiva","Certidão"],c:1,t:"Cǎilǐ (Presente em dinheiro/bens dado pela família do noivo à família da noiva)"},
+{q:(++id)+") Qual o nome das casas tradicionais com pátio interno,raras em cidades grandes mas visíveis em cidades históricas?",a:["公寓","四合院","别墅"],c:1,t:"Sìhéyuàn (Pátio quadrado cercado por quatro edifícios)"},
+{q:(++id)+") Como os pais chamam a pressão para os filhos casarem logo (Casamento forçado)?",a:["催婚","请客","放假"],c:0,t:"Cuīhūn (Ato de apressar ou pressionar os filhos para o casamento)"},
+{q:(++id)+") Qual o termo para o 'mercado de rua' matinal,muito vibrante em cidades pequenas?",a:["超市","早市","商场"],c:1,t:"Zǎoshì (Mercado matinal onde se compra vegetais frescos e café da manhã)"},
+{q:(++id)+") Como se chama a estrutura familiar comum de '4 avós,2 pais e 1 filho'?",a:["4-2-1","金字塔","大家庭"],c:0,t:"Estrutura 4-2-1 (Reflete o impacto da antiga política do filho único nas famílias atuais)"},
+{q:(++id)+") Qual destes itens é raramente encontrado em banheiros de casas comuns na China?",a:["Espelho","Chuveiro","Banheira"],c:2,t:"Banheiras são raras (A maioria dos chineses prefere chuveiros por economia de espaço e água)"},
+{q:(++id)+") O que as famílias costumam colar nas portas durante o Ano Novo Chinês?",a:["Bandeiras","Dísticos vermelhos(Chunlian)","Fotos"],c:1,t:"Chūnlián (Frases de boa sorte em papel vermelho para atrair prosperidade)"},
+{q:(++id)+") Qual a porcentagem aproximada de famílias que possuem casa própria na China?",a:["50%","70%","90%"],c:2,t:"Cerca de 90% (Uma das maiores taxas de casa própria do mundo)"},
+{q:(++id)+") Qual animal é frequentemente criado em quintais de casas rurais no sul da China?",a:["Porco","Canguru","Elefante"],c:0,t:"Porco (Historicamente central na economia doméstica; o ideograma para 'casa' 家 inclui o símbolo de um porco sob um teto)"},
+{q:(++id)+") Onde as famílias costumam deixar os sapatos ao entrar em casa?",a:["Na sala","Do lado de fora/na entrada","No quarto"],c:1,t:"Entrada (É regra de higiene trocar os sapatos de rua por chinelos de casa logo na porta)"},
+{q:(++id)+") Quem geralmente assume o papel principal de cuidar dos netos nas cidades menores?",a:["Babás","Vizinhos","Avós"],c:2,t:"Avós (É culturalmente esperado que os avós cuidem dos netos enquanto os pais trabalham)"},
+{q:(++id)+") Como as famílias costumam servir os pratos em uma refeição coletiva?",a:["Pratos individuais","Pratos compartilhados ao centro","Self-service"],c:1,t:"Gòngshí (O hábito de compartilhar vários pratos ao centro simboliza união familiar)"},
+{q:(++id)+") Qual utensílio é considerado falta de educação espetar verticalmente na tigela de arroz?",a:["Colher","Faca","Hashis (Kuàizi)"],c:2,t:"Espetar os hashis verticalmente lembra incensos em rituais fúnebres e traz 'má sorte'"},
+{q:(++id)+") O que quase nunca é servido gelado em uma mesa de família tradicional?",a:["Cerveja","Água/Chá","Suco"],c:1,t:"A medicina chinesa preza por bebidas quentes ou em temperatura ambiente para ajudar na digestão"},
+{q:(++id)+") Qual alimento as famílias comem no aniversário para desejar 'vida longa'?",a:["Bolo","Macarrão comprido","Frango"],c:1,t:"Chángshòumiàn (Macarrão da Longevidade - quanto mais comprido o fio,mais longa a vida)"},
+{q:(++id)+") Quem geralmente começa a comer primeiro em um jantar familiar formal?",a:["As crianças","A pessoa mais velha","Quem cozinhou"],c:1,t:"Respeito aos mais velhos (Lǎonianrén) é a base da etiqueta à mesa na China"},
+{q:(++id)+") O que significa quando alguém coloca comida diretamente na sua tigela?",a:["Falta de educação","Hospitalidade/Carinho","Pressa"],c:1,t:"É um gesto comum de anfitriões ou parentes para mostrar que você é bem-vindo e querido"},
+{q:(++id)+") Qual é a 'base' alimentar das famílias no sul da China,comparada ao trigo no norte?",a:["Batata","Arroz","Milho"],c:1,t:"Sul: Arroz (Mǐfàn) / Norte: Massas e Pães de trigo (Miànshí)"},
+{q:(++id)+") Qual cidade é considerada o berço da culinária Sichuan?",a:["Pequim","Chengdu","Xangai"],c:1,t:"Chéngdū é famosa pela pimenta e pelo 'málà' (picante e entorpecente) típico da cozinha Sichuan"},
+{q:(++id)+") Qual bairro de Pequim é conhecido por seus tradicionais hutongs?",a:["Sanlitun","Dashilar","Xintiandi"],c:1,t:"Os hutongs de Dàshílǎr preservam vielas antigas e casas tradicionais,símbolo da vida comunitária"},
+{q:(++id)+") Qual cidade costeira é famosa por sua arquitetura colonial e influência europeia?",a:["Guangzhou","Qingdao","Shenzhen"],c:1,t:"Qīngdǎo tem forte herança alemã,visível em suas construções e na famosa cerveja Tsingtao"},
+{q:(++id)+") Qual bairro de Xangai mistura prédios coloniais e modernos arranha-céus?",a:["Bund","Hutong","798"],c:0,t:"O Bund (Wàitān) é cartão-postal de Xangai,com vista para o rio Huangpu e contraste arquitetônico"},
+{q:(++id)+") Qual cidade é considerada o centro tecnológico da China?",a:["Shenzhen","Xi’an","Harbin"],c:0,t:"Shēnzhèn evoluiu de vila pesqueira para polo de inovação e tecnologia em poucas décadas"},
+{q:(++id)+") Qual bairro de Pequim é famoso por arte contemporânea e galerias?",a:["798 Art District","Bund","Sanlitun"],c:0,t:"O 798 Art District é um complexo industrial transformado em espaço cultural e artístico"},
+{q:(++id)+") Qual cidade é conhecida como capital imperial,com muralhas e o Exército de Terracota?",a:["Xi’an","Nanjing","Luoyang"],c:0,t:"Xī’ān foi ponto inicial da Rota da Seda e guarda o legado dos guerreiros de terracota"},
+{q:(++id)+") Qual festival é celebrado em Harbin com esculturas de gelo gigantes?",a:["Festival da Primavera","Festival Internacional do Gelo e Neve","Festival da Lua"],c:1,t:"O Festival Internacional do Gelo e Neve de Hā’ěrbīn atrai turistas do mundo todo com castelos e esculturas iluminadas"},
+{q:(++id)+") Em qual cidade ocorre o famoso Festival das Lanternas no Lago Oeste?",a:["Hangzhou","Suzhou","Chengdu"],c:0,t:"Hángzhōu celebra o Festival das Lanternas no Xīhú (Lago Oeste),símbolo de beleza poética e tradição"},
+{q:(++id)+") Qual cidade é conhecida pelo Festival do Barco-Dragão?",a:["Guangzhou","Hong Kong","Macau"],c:0,t:"Guǎngzhōu realiza corridas de barcos-dragão no Duānwǔ Jié,em homenagem ao poeta Qu Yuan"},
+{q:(++id)+") Qual tradição marca o Ano Novo Chinês em Pequim?",a:["Queima de fogos","Dança do Leão","Troca de presentes"],c:1,t:"A Dança do Leão (Shīziwǔ) é realizada em bairros tradicionais para espantar maus espíritos e trazer prosperidade"},
+{q:(++id)+") Qual cidade celebra o Festival da Lua com lanternas flutuantes no rio?",a:["Xi’an","Hong Kong","Shanghai"],c:0,t:"Em Xi’ān,lanternas são soltas no rio durante o Zhōngqiū Jié,simbolizando união e esperança"},
+{q:(++id)+") Qual bairro de Xangai é famoso por suas celebrações do Ano Novo Chinês?",a:["Yuyuan Garden","Bund","Sanlitun"],c:0,t:"O Jardim Yùyuán recebe milhares de lanternas coloridas e apresentações culturais durante o Ano Novo"},
+{q:(++id)+") Qual cidade preserva a tradição de comer bolinhos (jiǎozi) na virada do ano?",a:["Pequim","Shenzhen","Harbin"],c:0,t:"Em Běijīng,famílias se reúnem para preparar jiǎozi,símbolo de prosperidade e fortuna no Ano Novo"},
+{q:(++id)+") Qual conceito central do Confucionismo foca na 'piedade filial' e respeito aos ancestrais?",a:["仁","孝","道"],c:1,t:"Xiào (Piedade Filial) é a base das relações sociais de Confúcio."},
+{q:(++id)+") Segundo o Taoismo,qual é o princípio da 'não-ação' ou agir em harmonia com a natureza?",a:["无为","中庸","礼"],c:0,t:"Wúwéi prega o agir sem esforço ou resistência contra o fluxo natural."},
+{q:(++id)+") Qual símbolo representa a dualidade e o equilíbrio de forças opostas no universo?",a:["龙","阴阳","八卦"],c:1,t:"Yīnyáng ilustra como forças opostas são complementares e interdependentes."},
+{q:(++id)+") Quem é o autor lendário do 'Tao Te Ching' (Livro do Caminho e da Virtude)?",a:["孔子","老子","庄子"],c:1,t:"Lǎozǐ é considerado o fundador do Taoismo e autor do Tao Te Ching."},
+{q:(++id)+") Qual termo confucionista refere-se à 'benevolência' ou 'humanidade' entre as pessoas?",a:["仁","义","信"],c:0,t:"Rén é a virtude suprema de Confúcio,significando amor e empatia pelo próximo."},
+{q:(++id)+") Na filosofia de Sun Tzu,qual livro é o guia clássico sobre estratégia e tática?",a:["论语","孙子兵法","易经"],c:1,t:"A Arte da Guerra (Sūnzǐ Bīngfǎ) é o tratado militar mais influente da China."},
+{q:(++id)+") Qual escola filosófica defendia leis rígidas e punições severas para manter a ordem social?",a:["墨家","法家","儒家"],c:1,t:"O Legalismo (Fǎjiā) foi a base do governo do primeiro imperador,Qin Shi Huang."},
+{q:(++id)+") O conceito de 'Zhongyong' ensina o que os filósofos chamam de:",a:["Caminho do Meio","Destino Final","Poder Absoluto"],c:0,t:"Zhōngyōng (Doutrina do Meio) foca no equilíbrio e moderação em todas as coisas."},
+{q:(++id)+") Qual empresa chinesa é a maior fabricante mundial de drones comerciais?",a:["大疆","华为","小米"],c:0,t:"DJI (Dàjiāng) domina o mercado global de drones modernos."},
+{q:(++id)+") Qual rede social é essencial na China para tudo,desde mensagens até pagamentos?",a:["百度","抖音","微信"],c:2,t:"WeChat (Wèixìn) é o 'super-app' indispensável no cotidiano chinês."},
+{q:(++id)+") Qual destas empresas é líder global em infraestrutura de 5G e smartphones?",a:["联想","华为","腾讯"],c:1,t:"Huawei (Huáwéi) é pioneira na tecnologia de redes 5G."},
+{q:(++id)+") Como se chama o sistema de navegação por satélite desenvolvido pela China?",a:["北斗","长征","神舟"],c:0,t:"BeiDou (Běidǒu) é o equivalente chinês ao sistema GPS."},
+{q:(++id)+") Qual plataforma é a versão original chinesa do TikTok?",a:["小红书","哔哩哔哩","抖音"],c:2,t:"Douyin (Dǒuyīn) é o nome da rede social de vídeos curtos na China."},
+{q:(++id)+") Qual gigante do e-commerce foi fundada por Jack Ma?",a:["阿里巴巴","京东","拼多多"],c:0,t:"Alibaba (Ālǐbābā) revolucionou o comércio eletrônico e pagamentos digitais."},
+{q:(++id)+") Qual destas marcas é uma gigante fabricante de carros elétricos (EV) na China?",a:["比亚迪","百度","中兴"],c:0,t:"BYD (Bǐyàdí) é uma das maiores fabricantes de veículos elétricos do mundo."},
+{q:(++id)+") Qual motor de busca é o mais utilizado na China (o 'Google chinês')?",a:["搜狗","百度","网易"],c:1,t:"Baidu (Bǎidù) é o principal buscador da internet chinesa."},
+{q:(++id)+") Como se chama o rigoroso exame de admissão para a universidade na China?",a:["中考","高考","期末"],c:1,t:"O Gāokǎo é um dos exames mais competitivos do mundo e define o futuro dos estudantes."},
+{q:(++id)+") Qual é o termo para 'professor',demonstrando grande respeito na cultura chinesa?",a:["学生","校长","老师"],c:2,t:"Lǎoshī é o termo de tratamento padrão para educadores."},
+{q:(++id)+") Qual destes níveis de ensino corresponde ao 'Ensino Fundamental' na China?",a:["小学","大学","幼儿园"],c:0,t:"Xiǎoxué refere-se à escola primária."},
+{q:(++id)+") Qual é a prestigiada universidade em Pequim,frequentemente comparada a Harvard?",a:["复旦大学","清华大学","浙江大学"],c:1,t:"A Universidade de Tsinghua (Qīnghuá) é líder em tecnologia e engenharia."},
+{q:(++id)+") Como se chama o uniforme escolar que a maioria dos estudantes chineses usa diariamente?",a:["旗袍","汉服","校服"],c:2,t:"Xiàofú é o uniforme,geralmente em estilo esportivo (agasalho),comum nas escolas públicas."},
+{q:(++id)+") Qual é a língua oficial ensinada em todas as escolas da China continental?",a:["粤语","普通话","上海话"],c:1,t:"O Pǔtōnghuà (Mandarim padrão) é a língua de instrução nacional."},
+{q:(++id)+") Qual atividade física é obrigatória para quase todos os alunos no início da manhã?",a:["做操","踢球","游泳"],c:0,t:"Zuòcāo são os exercícios calistênicos realizados em grupo no pátio da escola."},
+{q:(++id)+") Como os alunos chamam os colegas de classe mais velhos (homens)?",a:["学姐","学弟","学长"],c:2,t:"Xuécháng é o termo respeitoso para um veterano do sexo masculino."},
+{q:(++id)+") Qual esporte é considerado a 'paixão nacional' da China e domina o cenário mundial?",a:["足球","乒乓球","网球"],c:1,t:"Tênis de Mesa (Pīngpāngqiú) é o esporte mais popular e vitorioso da China."},
+{q:(++id)+") Qual arte marcial tradicional chinesa é praticada tanto para defesa quanto para saúde?",a:["武术","柔道","空手道"],c:0,t:"Wǔshù engloba as diversas artes marciais tradicionais,como o Kung Fu."},
+{q:(++id)+") Em qual esporte coletivo a seleção feminina da China tem grande destaque mundial?",a:["棒球","排球","橄榄球"],c:1,t:"O Vôlei (Páiqiú) feminino é extremamente popular e coleciona medalhas de ouro olímpicas."},
+{q:(++id)+") Qual modalidade de ginástica meditativa é vista em parques todas as manhãs?",a:["太极拳","跆拳道","瑜伽"],c:0,t:"Tai Chi Chuan (Tàijíquán) é praticado massivamente por idosos para longevidade."},
+{q:(++id)+") Em qual dessas modalidades a China costuma ganhar quase todas as medalhas de ouro olímpicas?",a:["赛马","跳水","冲浪"],c:1,t:"Os Saltos Ornamentais (Tiàoshuǐ) são uma especialidade onde a China é quase imbatível."},
+{q:(++id)+") Qual esporte de raquete,jogado com uma peteca de penas,é onipresente na China?",a:["羽毛球","高尔夫","保龄球"],c:0,t:"O Badminton (Yǔmáoqiú) é jogado em quase todos os parques e ginásios do país."},
+{q:(++id)+") Como se chama a tradicional 'Corrida de Barcos' realizada durante o Festival de Duanwu?",a:["帆船","龙舟","皮划艇"],c:1,t:"O Barco Dragão (Lóngzhōu) é uma competição milenar celebrada em rios e lagos."},
+{q:(++id)+") Qual liga de basquete estrangeira é extremamente assistida e influente na China?",a:["CBA","NBA","MLS"],c:1,t:"A NBA tem uma base de fãs gigantesca na China,impulsionada pelo legado de Yao Ming."},
+{q:(++id)+") O que é *guanxi*?",a:["关系","面子","礼貌"],c:0,t:"Guanxi é a rede de contatos baseada em confiança e favores mútuos."},
+{q:(++id)+") O que significa *mianzi* (face)?",a:["面子","关系","诚信"],c:0,t:"Mianzi refere-se ao status social, honra e o respeito recebido dos outros."},
+{q:(++id)+") Qual app é usado para pagamentos na China?",a:["支付宝","微信","百度"],c:0,t:"O Alipay (Zhīfùbǎo) é uma das plataformas de pagamento móvel mais comuns."},
+{q:(++id)+") Como se cumprimenta formalmente?",a:["握手","拥抱","鞠躬"],c:0,t:"O aperto de mão é comum em negócios; a vênia (curvatura) é mais tradicional."},
+{q:(++id)+") Qual valor confuciano influencia a família?",a:["孝","义","礼"],c:0,t:"Piedade Filial (Xiào) foca no respeito e cuidado com pais e idosos."},
+{q:(++id)+") Presentes são comuns em visitas?",a:["是","否","视情况而定"],c:0,t:"Sim, é costume levar presentes, mas evite relógios ou guarda-chuvas (tabus)."},
+{q:(++id)+") O que evitar em conversas?",a:["公开批评","谈天气","谈美食"],c:0,t:"Críticas públicas fazem a pessoa 'perder a face', o que deve ser evitado."},
+{q:(++id)+") Como se comportar em um jantar de negócios?",a:["等主人先动筷","先吃为快","随意离席"],c:0,t:"Etiqueta: espere o anfitrião ou o mais velho começar a comer primeiro."},
+{q:(++id)+") Qual a importância dos cartões de visita?",a:["非常重要","不重要","可有可无"],c:0,t:"Muito importantes; devem ser entregues e recebidos com as duas mãos."},
+{q:(++id)+") Como construir *guanxi*?",a:["长期交往与互惠","一次性礼物","只靠合同"],c:0,t:"Guanxi se constrói com interações de longo prazo, ajuda mútua e confiança."},
+{q:(++id)+") É comum dividir a conta entre amigos?",a:["常见","从不","只有老板付"],c:0,t:"É comum, mas em negócios o anfitrião ou quem convida costuma pagar tudo."},
+{q:(++id)+") Como tratar idosos?",a:["尊敬并让座","忽视","与年轻人同等对待"],c:0,t:"O respeito aos idosos é fundamental, incluindo prioridade em assentos públicos."},
+{q:(++id)+") O que é *hukou*?",a:["户口","护照","身份证"],c:0,t:"Hukou é o sistema de registro residencial que afeta educação e benefícios social."},
+{q:(++id)+") Como se pede desculpas adequadamente?",a:["私下真诚道歉","当众指责对方","忽略问题"],c:0,t:"Desculpas em particular preservam a face de ambas as partes."},
+{q:(++id)+") Qual papel das redes sociais na China?",a:["微信为中心的超级应用","仅用于娱乐","不常用"],c:0,t:"O WeChat (Wēixìn) é o centro da vida digital, unindo chat, pagamentos e serviços."},
+{q:(++id)+") Como negociar com chineses?",a:["先建立关系再谈条件","直接强硬压价","只看合同条款"],c:0,t:"Primeiro estabeleça confiança e relacionamento; o contrato vem depois."},
+{q:(++id)+") É educado recusar comida oferecida?",a:["先婉拒再接受","直接拒绝","立刻抢着吃"],c:0,t:"É educado recusar gentilmente uma vez antes de aceitar a oferta do anfitrião."},
+{q:(++id)+") Como presentear em casamentos?",a:["红包（现金）","鲜花","刀具"],c:0,t:"Envelopes vermelhos (Hóngbāo) com dinheiro são o presente tradicional padrão."},
+{q:(++id)+") O que é tabu em presentes?",a:["刀具与钟表","水果篮","茶叶"],c:0,t:"Facas e relógios têm significados azarados (cortar laços ou funeral)."},
+{q:(++id)+") Como lidar com elogios?",a:["谦虚回应","大肆夸耀","忽视对方"],c:0,t:"A resposta padrão é a modéstia, muitas vezes negando o elogio por educação."},
+{q:(++id)+") Qual a etiqueta no transporte público?",a:["给老人和孕妇让座","大声通话","随意插队"],c:0,t:"Deve-se ceder assento a idosos, gestantes e pessoas com deficiência."},
+{q:(++id)+") Como se comportar em reuniões?",a:["准时并尊重等级","随意迟到","打断上司发言"],c:0,t:"Pontualidade e respeito à hierarquia são essenciais no ambiente corporativo."},
+{q:(++id)+") O que é esperado de um anfitrião?",a:["热情好客","冷淡接待","只顾自己"],c:0,t:"Hospitalidade extrema; o anfitrião faz de tudo para o convidado se sentir bem."},
+{q:(++id)+") Como abordar um colega sênior?",a:["先正式后逐渐亲近","直接称呼昵称","忽视礼节"],c:0,t:"Inicie de forma formal e ganhe intimidade conforme a confiança cresce."},
+{q:(++id)+") Qual a atitude sobre conflitos?",a:["重视和谐与间接解决","公开对抗","诉诸法律为首选"],c:0,t:"Valoriza-se a harmonia social, preferindo resolver conflitos de forma indireta."},
+{q:(++id)+") Como usar humor com desconhecidos?",a:["谨慎使用","随意讽刺","频繁自嘲"],c:0,t:"Use com cautela para evitar mal-entendidos ou ofensas acidentais."},
+{q:(++id)+") O que é *face-saving* em negócios?",a:["避免当众揭短","公开羞辱对方","随意批评"],c:0,t:"Evitar apontar erros em público para não humilhar o parceiro de negócios."},
+{q:(++id)+") Como são as reuniões familiares em feriados?",a:["频繁团聚重视团圆","很少见面","只在线上聚会"],c:0,t:"Datas festivas focam na 'reunião completa' (Tuányuán) da família."},
+{q:(++id)+") Qual a importância das redes de bairro tradicionais?",a:["社区互助与强社会联系","没有作用","只用于商业"],c:0,t:"Comunidades tradicionais mantêm laços fortes de ajuda mútua entre vizinhos."}
+];
+function shuffleArrayInPlace(array){
+	currentIndex=array.length;
+	while(currentIndex!=0){
+		randomIndex=parseInt(Math.random()*currentIndex);
+		currentIndex--;
+		[array[currentIndex],array[randomIndex]]=[array[randomIndex],array[currentIndex]];
+	}
+	return array;
+}
+function pergunta(){
+	item=questions[parseInt(Math.random()*questions.length)];
+	document.body.innerHTML="<div id=wrapper><div class=question-card style='animation:entrada"+parseInt(Math.random()*8)+"1s;'><div id=enunciado>"+item.q+"</div><div id=options></div><div id=hint style='display:none;'><br><b>DICA RESPOSTA</b><br>"+item.t+"</div><div id=reload onclick='pergunta();'>Outra pergunta<br>atalho: \"P\"</div></div>";
+	optDiv=document.getElementById('options');
+	gabarito="";
+	alternativas=[];
+	item.a.forEach((opt,i)=>{
+		alternativas.push([opt,i==item.c]);
+	});
+	shuffleArrayInPlace(alternativas);
+	alternativas.forEach((opt,i)=>{
+		optDiv.innerHTML+="<button onclick='resposta();'>"+opt[0]+"</button>";
+		gabarito+="<button class="+(opt[1]?"correct":"wrong")+">"+opt[0]+"</button>";
+	});
+};
+function resposta(){
+	document.getElementById('hint').style.display='';
+	optDiv.innerHTML=gabarito;
+};
+pergunta();
+if("serviceWorker" in navigator){
+	window.addEventListener("load",()=>{
+		navigator.serviceWorker.register("./serviceworker.js")
+		.then(()=>console.log("Registro Ok!"))
+		.catch((err)=>console.log(err));
+	});
+}
+</script>
+</html>
