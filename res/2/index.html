@@ -423,7 +423,7 @@ function renderSquare(s){
 
 	for(m=0;m<movesList.length;m++) //procurando na lista de jogadas válidas
 		if(selected==movesList[m][0]&&s==movesList[m][1]) //se o quadrado é um local válido  de concluir o movimento
-			bgtdcolor="1a73e8"; //azul escuro
+			bgtdcolor="0a53c8"; //azul escuro
 
 	htm+="<td style='width:42px; height:42px; background-color:#"+bgtdcolor+";'>"; //o quadrado
 	htm+="<div onclick='pickSquare("+s+");' style='width:32px; height:32px; margin:0px auto; text-align:center; font-size:22px; border-radius:50%; border:2px solid "; //o circulo dentro do quadrado
@@ -439,20 +439,18 @@ function renderSquare(s){
 			else
 				htm+="#808080; background-color:#808080;'>"; //cor da borda do círculo igual a cor de dentro do círculo
 
-		switch(board[s]){
-			case 'p':htm+="&#9823;";break; // ♟ peao preto
-			case 'n':htm+="&#9822;";break; // ♞ cavalo preto
-			case 'b':htm+="&#9821;";break; // ♝ bispo preto
-			case 'r':htm+="&#9820;";break; // ♜ torre preto
-			case 'q':htm+="&#9819;";break; // ♛ rainha preto
-			case 'k':htm+="&#9818;";break; // ♚ rei preto
-			case 'P':htm+="&#9817;";break; // ♙ peao branco
-			case 'N':htm+="&#9816;";break; // ♘ cavalo branco
-			case 'B':htm+="&#9815;";break; // ♗ bispo branco
-			case 'R':htm+="&#9814;";break; // ♖ torre branco
-			case 'Q':htm+="&#9813;";break; // ♕ rainha branco
-			case 'K':htm+="&#9812;";break; // ♔ rei branco
-		}
+		if(board[s]=='p')htm+="&#9823;"; // ♟ peao preto
+		if(board[s]=='n')htm+="&#9822;"; // ♞ cavalo preto
+		if(board[s]=='b')htm+="&#9821;"; // ♝ bispo preto
+		if(board[s]=='r')htm+="&#9820;"; // ♜ torre preto
+		if(board[s]=='q')htm+="&#9819;"; // ♛ rainha preto
+		if(board[s]=='k')htm+="&#9818;"; // ♚ rei preto
+		if(board[s]=='P')htm+="&#9817;"; // ♙ peao branco
+		if(board[s]=='N')htm+="&#9816;"; // ♘ cavalo branco
+		if(board[s]=='B')htm+="&#9815;"; // ♗ bispo branco
+		if(board[s]=='R')htm+="&#9814;"; // ♖ torre branco
+		if(board[s]=='Q')htm+="&#9813;"; // ♕ rainha branco
+		if(board[s]=='K')htm+="&#9812;"; // ♔ rei branco
 	}
 
 	htm+="</div>"; //o circulo dentro do quadrado
@@ -510,6 +508,6 @@ function main(){
 
 main();
 
-//https://rodrigoschiomuniz.github.io/procedimentos/index.html?tutorial=2
+//https://somonhudo.github.io/Procedimentos/index.html?tutorial=2
 </script>
 </html>

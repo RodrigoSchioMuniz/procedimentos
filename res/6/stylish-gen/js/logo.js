@@ -79,7 +79,7 @@ function geraStilo(cor, fonte, quadro, icone) {
 	nome += " text-transform:" + localStorage.getItem("logo-text-transform") + ";";
 	nome += "\">" + localStorage.getItem("logo-nome").replace(/\</g, '&lt;').replace(/\n/g, '<br>').replace(/  /g, ' &nbsp;') + "</span>";
 
-	let logo = "\n\t<img src='https://RodrigoSchioMuniz.github.io/procedimentos/res/6/stylish-gen/" + (fontcolor == "true" ? "iconesescuros" : "iconesclaros") + "/" + localStorage.getItem("logo-logo") + ".svg'>";
+	let logo = "\n\t<img src='https://baideruls.github.io/Procedimentos/res/6/stylish-gen/" + (fontcolor == "true" ? "iconesescuros" : "iconesclaros") + "/" + localStorage.getItem("logo-logo") + ".svg'>";
 
 	let attrContainer = "padding:0px 34px; width:100%; height:100%; background-color:#" + bgcolor + "; display:flex; align-items:center; justify-content:center;";
 	importFont = "<style>@import url('https://fonts.googleapis.com/css2?family=" + localStorage.getItem("logo-font-family") + "&display=swap');</style>\n";
