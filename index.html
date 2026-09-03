@@ -38,7 +38,7 @@ small{float:right;color:#5c5c5c;cursor:pointer;padding:0px 6px 6px;}
 	<main id="main"></main>
 
 	<article>
-		<a href="https://github.com/somonhudo/Procedimentos"><span>source-code repo</span></a>
+		<a href="https://github.com/RodrigoSchioMuniz/procedimentos"><span>source-code repo</span></a>
 	</article>
 </body>
 
@@ -66,7 +66,7 @@ function listacategorias(c){
 	for(x=0;x<procedimentos.length;x++)if(c=="todos"||procedimentos[x][6]==c)if(x!=17)conteudo+=cardprocedimento(x);
 	conteudo+="<h3>Informação Adicional Extra</h3>";
 	conteudo+=cardprocedimento(17);
-	conteudo+="<article "+anima(x)+" onclick=\"location.href='https://somonhudo.github.io/Perceptron';\" class='card'><h2>Como programar uma i.a.</h2><span class=badge> * Tutorial Externo</span><br><br><a>Inteligência Artficial desde o zero</a><br><br>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
+	conteudo+="<article "+anima(x)+" onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2>Como programar uma i.a.</h2><span class=badge> * Tutorial Externo</span><br><br><a>Inteligência Artficial desde o zero</a><br><br>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
 	document.getElementsByTagName("main")[0].innerHTML=conteudo;
 }
 
