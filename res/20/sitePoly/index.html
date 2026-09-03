@@ -1,0 +1,115 @@
+<!doctype HTML>
+<html>
+<meta charset=utf-8>
+<meta name=viewport content='width=device-width, initial-scale=1'>
+<title>Poly</title>
+<style>
+body{background:#202820;color:#ffffff;font-family:Courier;margin:0px;}
+h1{background:#67a352;padding:32px;font-size:40px;padding-left:18px;margin-top:-0px;cursor:pointer;}
+h2{background:#67a352;padding:20px;margin-top:30px;margin-left:-20px;}
+b{font-size:20px;padding-left:12px;padding-right:12px;}
+pre{border:1px solid #181818;padding:12px;background:#262e26;margin-left:-20px;}
+a{color:#8888bb;}
+footer{background:#67a352;padding:16px 30px;font-size:20px;font-weight:bold;text-align:right;color:#1c1c1c;margin-top:20px;}
+td{color:#888888;border:1px solid #888888;width:30px;height:30px;text-align:center;}
+.menu{background:#313131;padding:8px 20px;margin:8px 0px 6px 20px;color:#ffffff;text-decoration:none;border:1px solid #444c46;cursor:pointer;}
+#main{padding:0px 20px;min-height:70vh;}
+</style>
+<link href="prism.css" rel="stylesheet">
+<body onhashchange="main();">
+<h1 onclick="if(location.hash=='')location.hash='#';else location.hash='';">Poly</h1>
+<div>
+<button onclick="location.hash='';" class=menu>início</button>
+<button onclick="location.hash='1';" class=menu>compilando</button>
+<button onclick="location.hash='2';" class=menu>documentação</button>
+<button onclick="location.hash='3';" class=menu>exemplo</button>
+<button onclick="location.hash='4';" class=menu>comunidade</button>
+<button onclick="location.hash='5';" class=menu>tarefa</button>
+</div>
+
+<div id="main"></div>
+
+<script>
+function main(){
+	secao=parseInt(location.hash.substring(1));
+	htm="";
+	if(secao==5){
+		htm+="<h2> >> Tarefa</h2>";
+		htm+="Sua missão, caso você decida aceitar, será programar um joguinho simples (jogo-da-velha tic-tac-toe) com o software poly.<br><br>";
+		htm+="<table>";
+		htm+="<tt><td>X</td><td>0</td><td></td></tr>";
+		htm+="<tt><td>0</td><td>X</td><td>X</td></tr>";
+		htm+="<tt><td>0</td><td></td><td>0</td></tr>";
+		htm+="</table>";
+	}
+	else if(secao==4){
+		htm+="<h2> >> Contribua com o Poly</h2>";
+		htm+="Conheça o repositório oficial no github. De lá é possível ajudar com código ou deixando uma mensagem ou dúvida ou sugestão<br><br><br>";
+		htm+="<a class=menu href=https://github.com/RodrigoSchioMuniz/Poly style='margin-left:0px;'>Saiba Mais</a><br><br><br><br><br><br>";
+	}
+	else if(secao==3){
+		htm+="<h2> >> Codigo Mínimo (Entrando no Modo-Gráfico)</h2>";
+		htm+="<pre><code class='language-clike'>";
+		htm+="#include \"poly/poly.h\"\n";
+		htm+="main(){\n";
+		htm+="	setvideomode();\n";
+		htm+="	while(!keystate(KEY_ESCAPE)){\n";
+		htm+="\n";
+		htm+="		waitvbl();\n";
+		htm+="	}\n";
+		htm+="}</code></pre>";
+		htm+="<h2> >> Pula (Jogo Simples de Pular Obstáculos)</h2>";
+		htm+="<pre><code class='language-clike'>";
+		htm+="#include \"poly/poly.h\"\n\nint distanciaObstaculo1;\nint distanciaObstaculo2;\nint distanciaObstaculo3;\nint alturaPulo = 0;\nint gameover = 0;\n\nvoid inicializaJogo() { //função que reseta as variaveis para o jogo começar\n	distanciaObstaculo1 =- 250;\n	distanciaObstaculo2 =- 250;\n	distanciaObstaculo3 =- 250;\n	alturaPulo=0;\n	gameover=0;\n}\n\nint main() {  //função principal\n	setvideomode(); //modo gráfico\n\n	inicializaJogo(); //chama a função que reseta as variaveis para o jogo começar\n\n	while(!keystate(KEY_ESCAPE)) { //loop que se repete ATÉ QUE O JOGADOR APERTE A TECLA ESC\n\n		if(gameover != 0) { //se o jogo terminou\n			if(keystate(KEY_UP)) //se o jogador apertou a tecla UP do teclado\n				inicializaJogo(); //chama a função que reseta as variavei para o jogo recomeçar\n\n		} else { //se o jogo está rolando\n\n			if(alturaPulo == 0 && keystate(KEY_UP)) //se o Joe está no solo e o jogador apertou a tecla UP do teclado\n				alturaPulo = 5; //altura do pulo do Joe passa a ser 5 pixels\n\n			if(alturaPulo % 4 == 1) //se a altura do pulo do joe é um (múltiplo de 4) mais um\n				alturaPulo += 4; //joe sobe 4 pixels\n\n			if(alturaPulo % 4 == 3) //se a altura do pulo do joe é um (múltiplo de 4) mais três\n				alturaPulo -= 4; //joe desce 4 pixels\n\n			if(alturaPulo > 28)\n				alturaPulo = 31;\n\n			if(alturaPulo &lt; 2)\n				alturaPulo = 0;\n\n			//as três linhas abaixo desenham o retangulo onde o jogo rola\n			setcolor(15);\n			int background[8] = {20, 30, 300, 30, 300, 100, 20, 100};\n			fillpoly(background, 4);\n\n			setcolor(2); //verde\n\n			int head[8] = {\n				52, 80 - alturaPulo,\n				56, 80 - alturaPulo,\n				56, 83 - alturaPulo,\n				52, 83 - alturaPulo};\n			fillpoly(head, 4); //cabeça do Joe\n\n			int arms[8] = {\n				48, 84 - alturaPulo,\n				60, 84 - alturaPulo,\n				60, 86 - alturaPulo,\n				48, 86 - alturaPulo};\n			fillpoly(arms, 4); //braços do Joe\n\n			int body[8] = {\n				53, 86 - alturaPulo,\n				56, 86 - alturaPulo,\n				56, 91 - alturaPulo,\n				53, 91 - alturaPulo};\n			fillpoly(body, 4); //tronco\n\n			//pernas\n			int rightLeg[8] = {\n				52, 91 - alturaPulo,\n				54, 91 - alturaPulo,\n				54, 98 - alturaPulo,\n				52, 98 - alturaPulo};\n			fillpoly(rightLeg, 4);\n			int leftLeg[8] = {\n				55, 91 - alturaPulo,\n				57, 91 - alturaPulo,\n				57, 98 - alturaPulo,\n				55, 98 - alturaPulo};\n			fillpoly(leftLeg, 4);\n\n			setcolor(12); //vermelho\n			distanciaObstaculo1 = (distanciaObstaculo1 + 3) % 274;\n			distanciaObstaculo2 = (distanciaObstaculo2 + 4) % 274;\n			distanciaObstaculo3 = (distanciaObstaculo3 + 5) % 274;\n\n			int obs1[6] = {\n				292 - distanciaObstaculo1, 98,\n				296 - distanciaObstaculo1, 88,\n				300 - distanciaObstaculo1, 98}; //coordenadas do obstáculo1 posicionado\n			int obs2[6] = {\n				292 - distanciaObstaculo2, 98,\n				296 - distanciaObstaculo2, 88,\n				300 - distanciaObstaculo2, 98}; //coordenadas do obstáculo2 posicionado\n			int obs3[6] = {\n				292 - distanciaObstaculo3, 98,\n				296 - distanciaObstaculo3, 88,\n				300 - distanciaObstaculo3, 98}; //coordenadas do obstáculo3 posicionado\n\n			//desenha os obstáculos na tela\n			if(distanciaObstaculo1 > 0) fillpoly(obs1, 3);\n			if(distanciaObstaculo2 > 0) fillpoly(obs2, 3);\n			if(distanciaObstaculo3 > 0) fillpoly(obs3, 3);\n\n			//se o Joe está em colisão com algum dos obstáculos a variável gameover muda de valor\n			if(distanciaObstaculo1 > 232 && distanciaObstaculo1 &lt; 242 && alturaPulo &lt; 9) gameover = 1;\n			if(distanciaObstaculo2 > 232 && distanciaObstaculo2 &lt; 242 && alturaPulo &lt; 9) gameover = 1;\n			if(distanciaObstaculo3 > 232 && distanciaObstaculo3 &lt; 242 && alturaPulo &lt; 9) gameover = 1;\n\n			sleep(20); //pausa de 20 milissegundos (entre um 'frame' e outro)\n			waitvbl();\n		}\n	}\n	return 0;\n}</code></pre>";
+	}
+	else if(secao==2){
+		htm+="<h2> >> Funções Poly</h2>";
+		htm+="<pre><code class='language-clike'>";
+		htm+="void setcolor(int color);\n";
+		htm+="int getcolor();\n";
+		htm+="void putpixel(int x,int y,int color);\n";
+		htm+="void line(int x1,int y1,int x2,int y2);\n";
+		htm+="void rectangle(int x,int y,int w,int h);\n";
+		htm+="void bar(int x,int y,int w,int h);\n";
+		htm+="void circle(int x,int y,int r);\n";
+		htm+="void fillcircle(int x,int y,int r);\n";
+		htm+="void ellipse(int x,int y,int rx,int ry);\n";
+		htm+="void fillellipse(int x,int y,int rx,int ry);\n";
+		htm+="void drawpoly(int* points_xy,int count);\n";
+		htm+="void fillpoly(int* points_xy,int count);\n";
+		htm+="void blitInt(int n,int x,int y);</code></pre>";
+	}
+	else if(secao==1){
+		htm+="<h2> >> Editar Código</h2>";
+		htm+="Para escrever código usa-se algum software de edição.<br>";
+		htm+="Para criar os joguinhos você deve usar algum deles.";
+		htm+="<h2> >> Compilar</h2>";
+		htm+="Para gerar o arquivo executável <b>(o jogo)</b> basta executar o arquivo 'compila'<br><br>";
+		htm+="<div style='color:#646464;'>";
+		htm+="Esse arquivo envia o código-fonte do arquivo <b>game.c</b> para o compilador tinyCC (Tiny C Compiler)<br>";
+		htm+="O nome do arquivo-fonte deve 'obrigatoriamente' ser <b>game.c</b>";
+		htm+="</div><br>";
+		htm+="No desenvolvimento de software é comum errar e tentar de novo.<br>";
+		htm+="Caso haja algum erro no código o 'compila' irá falhar.<br>";
+		htm+="As regras da linguagem C são muitas e são rígidas.<br><br>";
+		htm+="O compila.bat exibe uma descrição do erro (em inglês) caso o executável não possa ser gerado.<br>";
+		htm+="Procurar na internet pela <b>descrição do erro</b> exibida é uma boa iniciativa.";
+	}
+	else{
+		htm+="<h2> >> Seja bem-vindo ao Site do Software Poly</h2>";
+		htm+="Esse é um software resignadamente <b>educacional</b> e os jogos resultantes tem limitações.<br><br>";
+		htm+="Bons softwares geralmente exploram alguns limites mas esse é meio complacente.<br>Esse é um software bunda-mole.<br><br>";
+		htm+="O objetivo desse software é incentivar a comunidade brasileira de jogos.<br><br>";
+		htm+="Esse software atua na divulgação do fato que escrever código é legal.<br><br><br>";
+		htm+="<a href=https://github.com/RodrigoSchioMuniz/Poly/archive/refs/heads/main.zip class=menu style='margin-left:0px;'>download poly</a><br><br>";
+	}
+	document.getElementById('main').innerHTML=htm;
+	Prism.highlightAll();
+}
+main();
+</script>
+
+<footer><button onclick="location.href='https://github.com/RodrigoSchioMuniz/Poly';" class=menu>Repositório Oficial</button></footer>
+<script src="prism.js"></script>
+</body>
+</html>
