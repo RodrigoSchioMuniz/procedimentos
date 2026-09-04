@@ -7,22 +7,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <style>
-body{font-family:Inter;background:#171717;color:#bebebe;margin:20px;}
-header{background:#262626;cursor:pointer;border-radius:6px;padding:12px 32px 24px;}
-h1{margin:22px 0px -10px 0px;color:#bebebe;}
-h2{font-size:20px;padding-bottom:8px;display:flex;align-items:center;border-bottom:1px solid #334155;color:#facc15;margin:0px 0px 16px;font-weight:normal;}
-p{color:#facc15;}
-.badge{background:#303030;padding:8px;border-radius:6px;font-size:14px;font-family:Courier;line-height:24px;cursor:pointer;}
+body{font-family:Inter;background:#e8e8e8;color:#414141;margin:20px;}
+header{background:#d3d3d3;cursor:pointer;border-radius:6px;padding:12px 32px 24px;}
+h1{margin:22px 0px -10px 0px;color:#414141;}
+h2{font-size:20px;padding-bottom:8px;display:flex;align-items:center;border-bottom:1px solid #ccbeaa;color:#c74207;margin:0px 0px 16px;font-weight:normal;}
+p{color:#c74207;}
+.badge{background:#c5c5c5;padding:8px;border-radius:6px;font-size:14px;font-family:Courier;line-height:24px;cursor:pointer;}
 .card{width:300px;margin-right:20px;margin-bottom:20px;display:inline-block;vertical-align:top;}
-.card p{text-align:left;padding-bottom:14px;color:#94a3b8;}
+.card p{text-align:left;padding-bottom:14px;color:#6b5c47;}
 .links{text-align:center;margin:10px;}
-.links a{text-decoration:none;color:#a3e635;padding:8px 12px;border-radius:6px;border:1px solid #a3e635;font-family:Courier;}
-article{border-radius:6px;background:#262626;border-radius:12px;padding:20px;}
-a{cursor:pointer;color:#38bdf8;font-weight:bold;text-decoration:none;border-bottom:1px solid #334155;border-top:1px solid #334155;padding:3px 8px;}
-b{color:#facc15;font-size:18px;}
-h3{border-left:6px dashed #a3e635;color:#a3e635;padding-left:8px;font-size:24px;}
+.links a{text-decoration:none;color:#538635;padding:8px 12px;border-radius:6px;border:1px solid #538635;font-family:Courier;}
+article{border-radius:6px;background:#d3d3d3;border-radius:12px;padding:20px;}
+a{cursor:pointer;color:#0533ea;text-decoration:none;border-bottom:1px solid #ccbeaa;border-top:1px solid #ccbeaa;padding:3px 8px;}
+b{color:#c74207;font-size:18px;}
+h3{border-left:6px dashed #5c19ca;color:#5c19ca;padding-left:8px;font-size:24px;}
 li{margin-left:30px;}
-small{float:right;color:#5c5c5c;cursor:pointer;padding:0px 6px 6px;}
+small{float:right;color:#a3a3a3;cursor:pointer;padding:0px 6px 6px;}
 .imagem{width:100%;max-width:500px;cursor:pointer;}
 @keyframes pisca{0%{opacity:1;}1%{opacity:0.7;}2%{opacity:1;}}
 </style>
@@ -73,7 +73,7 @@ function listacategorias(c){
 function anima(x){return "style='animation:pisca 7s "+(animacao++%7)+"s infinite;'";};
 function direciona(x){return "onclick=\"location.hash='"+x+"';\"";};
 function titulo(x){return "<h2>"+procedimentos[x][0]+"</h2>";};
-function linguagem(x){return "<span class=badge> * Linguagem "+procedimentos[x][2]+"</span><br><br>";};
+function linguagem(x){return "<span class=badge> * Linguagem "+procedimentos[x][2]+" &nbsp; </span><br><br>";};
 function subtitulo(x){return "<a>"+procedimentos[x][4]+"</a><br><br>";};
 function botoes(x){return "<div class=links><a>"+procedimentos[x][3]+"</a> &nbsp; <a>"+procedimentos[x][1]+"</a></div>";};
 function cardprocedimento(x){return "<article "+anima(x)+" "+direciona(x)+" class='"+procedimentos[x][6]+" card'>"+titulo(x)+linguagem(x)+subtitulo(x)+procedimentos[x][5]+"<br><br>"+botoes(x)+"</article>";}
