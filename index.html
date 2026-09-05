@@ -8,17 +8,17 @@
 <meta name="viewport" content="width=device-width">
 <style>
 body{font-family:Inter;background:#e8e8e8;color:#414141;margin:20px;}
-header{background:#d3d3d3;cursor:pointer;border-radius:6px;padding:12px 32px 24px;}
+header{background:#d3d3d3;cursor:pointer;border-radius:4px;padding:12px 32px 24px;}
 h1{margin:22px 0px -10px 0px;color:#414141;}
-h2{font-size:20px;padding-bottom:8px;display:flex;align-items:center;border-bottom:1px solid #ccbeaa;color:#c74207;margin:0px 0px 16px;font-weight:normal;}
+h2{font-size:18px;padding-bottom:8px;display:flex;align-items:center;border-bottom:1px solid #ffffff;color:#c74207;margin:0px 0px 20px;}
 p{color:#c74207;}
-.badge{background:#c5c5c5;padding:8px;border-radius:6px;font-size:14px;font-family:Courier;line-height:24px;cursor:pointer;}
+.badge{background:#c5c5c5;padding:8px;border-radius:4px;font-size:14px;font-family:Courier;line-height:24px;cursor:pointer;}
 .card{width:300px;margin-right:20px;margin-bottom:20px;display:inline-block;vertical-align:top;}
 .card p{text-align:left;padding-bottom:14px;color:#6b5c47;}
 .links{text-align:center;margin:10px;}
-.links a{text-decoration:none;color:#538635;padding:8px 12px;border-radius:6px;border:1px solid #538635;font-family:Courier;}
-article{border-radius:6px;background:#d3d3d3;border-radius:12px;padding:20px;}
-a{cursor:pointer;color:#0533ea;text-decoration:none;border-bottom:1px solid #ccbeaa;border-top:1px solid #ccbeaa;padding:3px 8px;}
+.links a{text-decoration:none;background:#e1e1e1;color:#538635;padding:8px 12px;border-radius:4px;border:1px solid #538635;font-family:Courier;}
+article{border-radius:4px;background:#d3d3d3;border-radius:8px;padding:20px;}
+a{cursor:pointer;color:#0533ea;text-decoration:none;border-bottom:1px solid #0533ea;border-top:1px solid #0533ea;padding:3px 8px;}
 b{color:#c74207;font-size:18px;}
 h3{border-left:6px dashed #5c19ca;color:#5c19ca;padding-left:8px;font-size:24px;}
 li{margin-left:30px;}
@@ -49,12 +49,13 @@ function main(){
 	if(procedimento==-1)listacategorias('todos'); //tela menu
 	else{ //tela detalhes
 		scrollTo(0,0);
-		document.getElementsByTagName("main")[0].innerHTML="<br><br><br><center>...</center><br><br><br>";
+		document.getElementById("main").innerHTML="<br><br><br><center>...</center><br><br><br>";
 		conteudo='';
-		fetch("conteudo/p"+procedimento+".json").then(function(response){return response.text();}).then(function(data){
-			eval('etapas='+data+';');
+		fetch("conteudo/snippet"+procedimento+".html").then(function(response){return response.text();}).then(function(data){
+			etapas=data.split('\n');
+			for(x=0;x<etapas.length;x++)eval('etapas['+x+']=`'+etapas[x]+'`;');
 			for(x=0;x<etapas.length;x++)conteudo+=etapas[x].replace("<h2>","<article><h2>"+posicao(x))+"<br></article><br>";
-			document.getElementsByTagName("main")[0].innerHTML=conteudo;
+			document.getElementById("main").innerHTML=conteudo;
 			Prism.highlightAll();
 		});
 	}
@@ -67,14 +68,14 @@ function listacategorias(c){
 	conteudo+="<h3>Informação Adicional Extra</h3>";
 	conteudo+=cardprocedimento(17);
 	conteudo+="<article "+anima(x)+" onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2>Como programar uma i.a.</h2><span class=badge> * Tutorial Externo</span><br><br><a>Inteligência Artficial desde o zero</a><br><br>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
-	document.getElementsByTagName("main")[0].innerHTML=conteudo;
+	document.getElementById("main").innerHTML=conteudo;
 }
 
 function anima(x){return "style='animation:pisca 7s "+(animacao++%7)+"s infinite;'";};
 function direciona(x){return "onclick=\"location.hash='"+x+"';\"";};
 function titulo(x){return "<h2>"+procedimentos[x][0]+"</h2>";};
 function linguagem(x){return "<span class=badge> * Linguagem "+procedimentos[x][2]+" &nbsp; </span><br><br>";};
-function subtitulo(x){return "<a>"+procedimentos[x][4]+"</a><br><br>";};
+function subtitulo(x){return "<div style='margin:8px 0px 14px;'><a>"+procedimentos[x][4]+"</a></div>";};
 function botoes(x){return "<div class=links><a>"+procedimentos[x][3]+"</a> &nbsp; <a>"+procedimentos[x][1]+"</a></div>";};
 function cardprocedimento(x){return "<article "+anima(x)+" "+direciona(x)+" class='"+procedimentos[x][6]+" card'>"+titulo(x)+linguagem(x)+subtitulo(x)+procedimentos[x][5]+"<br><br>"+botoes(x)+"</article>";}
 function posicao(x){return "<span class=badge>"+(x*10+parseInt(Math.random()*10))+"."+parseInt(Math.random()*10)+"</span>&nbsp;&nbsp;";};
