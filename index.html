@@ -20,7 +20,7 @@ p{color:#c74207;}
 article{border-radius:4px;background:#d3d3d3;border-radius:8px;padding:20px;}
 a{cursor:pointer;color:#0533ea;text-decoration:none;border-bottom:1px solid #0533ea;border-top:1px solid #0533ea;padding:3px 8px;}
 b{color:#c74207;font-size:18px;}
-h3{border-left:6px dashed #5c19ca;color:#5c19ca;padding-left:8px;font-size:24px;}
+h3{color:#538635;font-size:24px;text-align:center;text-transform:uppercase;border-top:1px solid #538635;border-bottom:1px solid #538635;padding:12px;}
 li{margin-left:30px;}
 small{float:right;color:#a3a3a3;cursor:pointer;padding:0px 6px 6px;}
 .imagem{width:100%;max-width:500px;cursor:pointer;}
@@ -34,11 +34,11 @@ small{float:right;color:#a3a3a3;cursor:pointer;padding:0px 6px 6px;}
 		<h1>Procedimentos</h1>
 		<p>Desenvolvimento de Software Passo-a-Passo</p>
 	</header><br>
-
 	<main id="main"></main>
-
 	<article>
-		<a href="https://github.com/RodrigoSchioMuniz/procedimentos"><span>source-code repo</span></a>
+		<a style="float:right;" href="https://github.com/RodrigoSchioMuniz/procedimentos">
+		projeto procedimentos
+		</a><br>
 	</article>
 </body>
 
@@ -67,7 +67,7 @@ function listacategorias(c){
 	for(x=0;x<procedimentos.length;x++)if(c=="todos"||procedimentos[x][6]==c)if(x!=17)conteudo+=cardprocedimento(x);
 	conteudo+="<h3>Informação Adicional Extra</h3>";
 	conteudo+=cardprocedimento(17);
-	conteudo+="<article "+anima(x)+" onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2>Como programar uma i.a.</h2><span class=badge> * Tutorial Externo</span><br><br><a>Inteligência Artficial desde o zero</a><br><br>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
+	conteudo+="<article "+anima(x)+" onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2>Como programar uma i.a.</h2><span class=badge> * Tutorial Externo</span><br><br><div style='margin:8px 0px 14px;'><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
 	document.getElementById("main").innerHTML=conteudo;
 }
 
