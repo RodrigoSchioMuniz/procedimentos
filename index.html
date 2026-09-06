@@ -8,19 +8,19 @@
 <meta name="viewport" content="width=device-width">
 <style>
 body{font-family:Inter;background:#e8e8e8;color:#414141;margin:20px;}
-header{border:1px solid #727272;cursor:pointer;border-radius:4px;padding:12px 32px 24px;}
+header{border:1px dashed #909090;cursor:pointer;border-radius:4px;padding:12px 32px 24px;}
 h1{margin:22px 0px -16px 0px;color:#414141;}
-h2{font-size:18px;padding-bottom:8px;display:flex;align-items:center;border-bottom:1px solid #727272;color:#c74207;margin:0px 0px 20px;}
+h2{font-size:18px;padding-bottom:8px;display:flex;align-items:center;border-bottom:1px dashed #909090;color:#c74207;margin:0px 0px 20px;}
 p{color:#c74207;}
 .badge{background:#c5c5c5;padding:8px;border-radius:4px;font-size:14px;font-family:Courier;line-height:24px;cursor:pointer;}
 .card{width:300px;margin-right:20px;margin-bottom:20px;display:inline-block;vertical-align:top;}
 .card p{text-align:left;padding-bottom:14px;color:#6b5c47;}
 .links{text-align:center;}
-.links a{text-decoration:none;background:#dedede;color:#538635;padding:8px 12px;border-radius:4px;border:1px solid #538635;font-family:Courier;}
-article{border-radius:4px;border:1px solid #727272;border-radius:8px;padding:20px;}
+.links a{text-decoration:none;background:#dedede;color:#538635;padding:8px 12px;border-radius:4px;border:1px dashed #538635;font-family:Courier;}
+article{border-radius:4px;border:1px dashed #909090;border-radius:8px;padding:20px;}
 a{cursor:pointer;color:#0533ea;text-decoration:none;border-bottom:1px solid #0533ea;border-top:1px solid #0533ea;padding:3px 8px;}
 b{color:#c74207;font-size:18px;}
-h3{color:#538635;font-size:24px;text-align:center;text-transform:uppercase;border-top:1px solid #538635;border-bottom:1px solid #538635;padding:12px;}
+h3{color:#538635;font-size:24px;text-align:center;text-transform:uppercase;border-top:1px dashed #538635;border-bottom:1px dashed #538635;padding:12px;}
 li{margin-left:30px;}
 small{float:right;color:#a3a3a3;cursor:pointer;padding:0px 6px 6px;}
 .imagem{width:100%;max-width:500px;cursor:pointer;}
@@ -62,7 +62,7 @@ function main(){
 }
 function listacategorias(c){
 	conteudo='';
-	conteudo+="<div class=links><a onclick=\"listacategorias('w');\">web</a> &nbsp; <a onclick=\"listacategorias('d');\">desktop</a> &nbsp; <a onclick=\"listacategorias('m');\">mobile</a> &nbsp; <img src=dice.png style='vertical-align:middle;border-radius:8px;border:1px solid #538635;bottom;height:36px;cursor:pointer;background:#dedede' onclick=\"location.hash=parseInt(Math.random()*21);\"></div><br>";
+	conteudo+="<div class=links><a onclick=\"listacategorias('w');\">web</a> &nbsp; <a onclick=\"listacategorias('d');\">desktop</a> &nbsp; <a onclick=\"listacategorias('m');\">mobile</a> &nbsp; <img src=dice.png style='vertical-align:middle;border-radius:8px;border:1px dashed #538635;bottom;height:24px;padding:4px;cursor:pointer;background:#dedede' onclick=\"location.hash=parseInt(Math.random()*21);\"></div><br>";
 	animacao=0;
 	for(x=0;x<procedimentos.length;x++)if(c=="todos"||procedimentos[x][6]==c)if(x!=17)conteudo+=cardprocedimento(x);
 	conteudo+="<h3>Informação Adicional Extra</h3>";
