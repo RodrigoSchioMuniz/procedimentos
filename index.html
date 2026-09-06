@@ -66,9 +66,10 @@ function listacategorias(c){
 	conteudo='';
 	conteudo+="<div class=links><a onclick=\"listacategorias('w');\">web</a> &nbsp; <a onclick=\"listacategorias('d');\">desktop</a> &nbsp; <a onclick=\"listacategorias('m');\">mobile</a> &nbsp; <img src=dice.png style='vertical-align:middle;border-radius:8px;border:1px dashed #538635;bottom;height:24px;padding:4px;cursor:pointer;background:#dedede' onclick=\"location.hash=parseInt(Math.random()*procedimentos.length);\"></div><br>";
 	animacao=0;
-	for(x=0;x<procedimentos.length;x++)if(c=="todos"||procedimentos[x][6]==c)if(x!=17)conteudo+=cardprocedimento(x);
+	for(x=0;x<procedimentos.length;x++)if(c=="todos"||procedimentos[x][6]==c)if(procedimentos[x][6]!='e')conteudo+=cardprocedimento(x);
 	conteudo+="<h3>Informação Adicional Extra</h3>";
 	conteudo+=cardprocedimento(17);
+	conteudo+=cardprocedimento(21);
 	conteudo+="<article "+anima(x)+" onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2>Como programar uma i.a.</h2><span class=badge> * Tutorial Externo</span><br><br><div style='margin:8px 0px 14px;'><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
 	document.getElementById("main").innerHTML=conteudo;
 }
@@ -103,7 +104,8 @@ procedimentos=[
 ["Armazenamento","Desktop","Textos e Imagens","Iniciantes","Como o computador armazena","Explicação detalhada de como os computadores armazenam informações","e"],
 ["Site Instalável","Desktop","PWA","Iniciantes","Progressive Web Application","Como programar e publicar uma página PWA","d"],
 ["Everywhere","Desktop","hta","Intermediários","Jogo de desviar dos objetos","Usando javascript html e css para programar um joguinho que funciona em computadores com windows","d"],
-["Empurrador de Caixas","Desktop","C","Avançados","Programar no software Poly","Comandos e conceitos básicos sobre desenvolvimento de games","d"]];
+["Empurrador de Caixas","Desktop","C","Avançados","Programar no software Poly","Comandos e conceitos básicos sobre desenvolvimento de games","d"],
+["Criptografia RSA","Web","Textos e Imagens","Iniciantes","Protocolo de Comunicação","Nas requisições pela internet um algoritmo interessante impede intermediários de acessarem dados","e"]];
 
 main();
 </script>
