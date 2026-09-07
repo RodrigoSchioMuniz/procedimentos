@@ -13,7 +13,7 @@ a{color:#8888bb;}
 footer{background:#67a352;padding:16px 30px;font-size:20px;font-weight:bold;text-align:right;color:#1c1c1c;margin-top:20px;}
 td{color:#888888;border:1px solid #888888;width:30px;height:30px;text-align:center;}
 .menu{background:#313131;padding:8px 20px;margin:8px 0px 6px 20px;color:#ffffff;text-decoration:none;border:1px solid #444c46;cursor:pointer;}
-#main{padding:0px 20px;min-height:70vh;}
+#main{padding:0px 20px;min-height:60vh;}
 </style>
 <link href="prism.css" rel="stylesheet">
 <body onhashchange="main();">
@@ -45,7 +45,16 @@ function main(){
 	else if(secao==4){
 		htm+="<h2> >> Contribua com o Poly</h2>";
 		htm+="Conheça o repositório oficial no github. De lá é possível ajudar com código ou deixando uma mensagem ou dúvida ou sugestão<br><br><br>";
-		htm+="<a class=menu href=https://github.com/RodrigoSchioMuniz/Poly style='margin-left:0px;'>Saiba Mais</a><br><br><br><br><br><br>";
+		htm+="<a class=menu href=https://github.com/RodrigoSchioMuniz/Poly style='margin-left:0px;'>Saiba Mais</a><br><br>";
+		htm+="<h2> >> Agradecimentos</h2>";
+		htm+="O software poly existe como resultado de muitos esforços.<br>";
+		htm+="Os desenvolvedores da linguagem C, os desenvolvedores e fabricantes de hardware, as equipes desenvolvedoras de softwares base (sistemas operacionais) no trouxeram à internet revolution<br>";
+		htm+="Um desenvolvedor criou um software incrível com código em linguagem C: (Fabrice criador do tcc)<br>";
+		htm+="O trabalho seguiu adiante e Mathias incluiu significativas contribuições quando fez o dos-like<br>";
+		htm+="O projeto poly começou quando Rodrigo selecionou partes importantes e adaptou para a comunidade BR<br>";
+		htm+="Selegadev colaborou por um tempo. A galera do gamedev toolkit ajudou na divulgação. A equipe do github sempre ofereceu suporte incrível.<br>";
+		htm+="Muito obrigado a todos.<br>";
+		htm+="Agradecimento também à antiga biblioteca graphics.h serviu como inspiração para o software poly.<br><br><br>";
 	}
 	else if(secao==3){
 		htm+="<h2> >> Codigo Mínimo (Entrando no Modo-Gráfico)</h2>";
