@@ -38,22 +38,16 @@ function main() {
 
     fetch("conteudo/snippet" + procedimento + ".html").then(function(response){return response.text();}).then(function(data) {
       conteudo = '';
-      etapas = data.split('\n');
+      etapas = data.split('<h2>');
 
-      for (x = 0; x < etapas.length; x++) {
-        eval('etapas[' + x + ']=`' + etapas[x] + '`;');
-      }
-
-      for (x = 0; x < etapas.length; x++) {
-        conteudo += etapas[x].replace("<h2>", "<article><h2>" + posicao(x)) + "<br></article><br>";
+      for (x = 1; x < etapas.length; x++) {
+        eval("etapa = `" + etapas[x] + "`");
+        conteudo += "<article><h2>" + posicao(x) + etapa + "<br></article><br>";
       }
 
       document.getElementById("main").innerHTML = conteudo;
       Prism.highlightAll();
-    })
-    .catch(error => {
-      document.getElementById("main").innerHTML = "<br><br><br><center>...<br><br>impossivel httprequest sem servidor<br><br>...</center><br><br><br>";
-    });
+    }).catch(function(error){document.getElementById("main").innerHTML = "<br><br><br><center>...<br><br>impossivel httprequest sem servidor<br><br>...</center><br><br><br>";});
   }
 }
 
