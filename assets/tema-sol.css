@@ -157,8 +157,8 @@ p {
 
 @keyframes sobe {
   from {
-    opacity: .1;
-    padding-top: 500px;
+    opacity: 0;
+    padding-top: 240px;
   }
   to {
     opacity: 1;
