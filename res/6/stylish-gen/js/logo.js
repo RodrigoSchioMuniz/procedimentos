@@ -51,7 +51,7 @@ function geraStilo(cor, fonte, quadro, icone) {
 	let bgcolor = localStorage.getItem("logo-bgcolor");
 	let fontcolor = localStorage.getItem("logo-fontcolor");
 
-	let moldura = "\n<div style='animation:entrada 0.3s; ";
+	let moldura = "\n<div style='animation:entrada 0.4s; ";
 	moldura += "border-radius:" + localStorage.getItem("logo-border-radius") + "px;";
 	moldura += " padding:" + localStorage.getItem("logo-padding") + "px;";
 

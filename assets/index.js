@@ -38,22 +38,16 @@ function main() {
 
     fetch("conteudo/snippet" + procedimento + ".html").then(function(response){return response.text();}).then(function(data) {
       conteudo = '';
-      etapas = data.split('\n');
+      etapas = data.split('<h2>');
 
-      for (x = 0; x < etapas.length; x++) {
-        eval('etapas[' + x + ']=`' + etapas[x] + '`;');
-      }
-
-      for (x = 0; x < etapas.length; x++) {
-        conteudo += etapas[x].replace("<h2>", "<article><h2>" + posicao(x)) + "<br></article><br>";
+      for (x = 1; x < etapas.length; x++) {
+        eval("etapa = `" + etapas[x] + "`");
+        conteudo += "<article><h2>" + posicao(x) + etapa + "<br></article><br>";
       }
 
       document.getElementById("main").innerHTML = conteudo;
       Prism.highlightAll();
-    })
-    .catch(error => {
-      document.getElementById("main").innerHTML = "<br><br><br><center>...<br><br>impossivel httprequest sem servidor<br><br>...</center><br><br><br>";
-    });
+    }).catch(function(error){document.getElementById("main").innerHTML = "<br><br><br><center>...<br><br>impossivel httprequest sem servidor<br><br>...</center><br><br><br>";});
   }
 }
 
@@ -62,17 +56,26 @@ function listacategorias(c) {
   animacao = 0;
 
   for (x = 0; x < procedimentos.length; x++) {
-    if (c == "todos" || procedimentos[x][6] == c) {
-      if (procedimentos[x][6] != 'e') {
-        conteudo += cardprocedimento(x);
-      }
+    if (procedimentos[x][6] == c || (c == "todos" && procedimentos[x][6] != 'e' && procedimentos[x][6] != 'a')) {
+      conteudo += cardprocedimento(x);
     }
   }
 
   conteudo += "<h3>Informação Adicional Extra</h3>";
-  conteudo += cardprocedimento(17);
-  conteudo += cardprocedimento(21);
-  conteudo += "<article " + anima(x) + " onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2>Como programar uma i.a.</h2><span class=badge> * Tutorial Externo</span><br><br><div class=subtitulo><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
+  for (x = 0; x < procedimentos.length; x++) {
+    if (procedimentos[x][6] == 'e') {
+      conteudo += cardprocedimento(x);
+    }
+  }
+
+  conteudo += "<article " + anima(x) + " onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2>Como programar uma IA</h2><span class=badge> * Tutorial Externo</span><br><br><div class=subtitulo><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
+
+  conteudo += "<h3>Indo Além do Source Code</h3>";
+  for (x = 0; x < procedimentos.length; x++) {
+    if (procedimentos[x][6] == 'a') {
+      conteudo += cardprocedimento(x);
+    }
+  }
 
   document.getElementById("main").innerHTML = conteudo;
 }
@@ -114,11 +117,11 @@ procedimentos = [
   ["Zombie Waves", "Mobile", "Java", "Intermediários", "Tutorial Jogo de Celular", "Como programar um jogo para android com a linguagem Java. Comandos 'extends View()' onTouchEvent() onDraw() onSizeChanged() TimerTask()", "m"],
   ["Xadrez", "Browser", "Javascript", "Avançados", "Tutorial Xadrez em Javascript", "Como programar um jogo de xadrez com a linguagem javascript", "w"],
   ["Database", "Server", "Php", "Intermediários", "Tutorial Banco de Dados", "Como iniciar com php e mysql. Comandos básicos de php. Criando uma base de dados mysql com xampp", "w"],
-  ["Campo Minado", "Mobile", "Java", "Intermediários", "Tutorial Jogo de Celular", "Como programar um jogo de celular. Programação javascript e java. Usando uma webview", "m"],
-  ["Jogo de Corrida", "Desktop", "Javascript", "Avançados", "Tutorial Jogo em Javascript", "Como programar um jogo com javascript. Um jogo de corrida no canvas. Como usar setTimeout e context.rotate()", "d"],
-  ["Stylish-Gen", "Front End", "CSS - JS", "Iniciantes", "Tutorial Stylish-Gen", "Tutorial que mostra como programar uma página simples que gera estilos aleatórios para frases que o usuário digita", "w"],
-  ["Breakout", "Browser", "Javascript", "Intermediários", "Tutorial Breakout Js", "Tutorial programação javascript. Jogo breakout. Arrays. Jogo. Como criar um joguinho em javascript com a tag canvas", "w"],
-  ["Square Motor", "Mobile", "Kotlin", "Avançados", "Tutorial Square Motor", "Tutorial sobre programação mobile android. Um jogo de corrida programado com a linguagem kotlin", "m"],
+  ["Campo Minado", "Mobile", "Java", "Intermediários", "Tutorial Jogo Mobile", "Como programar um jogo de celular. Programação javascript e java. Usando uma webview", "m"],
+  ["Jogo de Corrida", "Desktop", "Javascript", "Avançados", "Tutorial Faster Bill", "Como programar um jogo com javascript. Um jogo de corrida no canvas. Como usar setTimeout e context.rotate()", "d"],
+  ["Stylish-Gen", "Front End", "CSS - JS", "Iniciantes", "Tutorial Gera Estilos", "Tutorial que mostra como programar uma página simples que gera estilos aleatórios para frases que o usuário digita", "w"],
+  ["Breakout", "Browser", "Javascript", "Intermediários", "Tutorial Jogo Clássico", "Tutorial programação javascript. Jogo breakout. Arrays. Jogo. Como criar um joguinho em javascript com a tag canvas", "w"],
+  ["Square Motor", "Mobile", "Kotlin", "Avançados", "Tutorial Android Game", "Tutorial sobre programação mobile android. Um jogo de corrida programado com a linguagem kotlin", "m"],
   ["Site Simples", "Web", "HTML", "Iniciantes", "Tutorial como criar um site", "Tutorial sobre como escrever código html. Criando uma simples página", "w"],
   ["Endless Runner", "Desktop", "Python", "Iniciantes", "Tutorial Endless Runner", "Tutorial sobre como programar um joguinho com python. Um joguinho simples", "d"],
   ["Snake", "Desktop", "C", "Avançados", "Tutorial jogo Cobrinha", "Como programar o jogo da cobrinha com a linguagem C usando o Dev-C++", "d"],
@@ -131,7 +134,9 @@ procedimentos = [
   ["Site Instalável", "Desktop", "PWA", "Iniciantes", "Progressive Web Application", "Como programar e publish uma página PWA", "d"],
   ["Everywhere", "Desktop", "hta", "Intermediários", "Jogo de desviar dos objetos", "Usando javascript html e css para programar um joguinho que funciona em computadores com windows", "d"],
   ["Empurrador de Caixas", "Desktop", "C", "Avançados", "Programar no software Poly", "Comandos e conceitos básicos sobre desenvolvimento de games", "d"],
-  ["Criptografia RSA", "Web", "Textos e Imagens", "Avançados", "Protocolo de Comunicação", "Nas requisições pela internet um algoritmo interessante impede intermediários de acessarem dados", "e"]
+  ["Criptografia RSA", "Web", "C", "Avançados", "Protocolo de Comunicação", "Nas requisições pela internet um algoritmo interessante impede intermediários de acessarem dados", "e"],
+  ["Modo Imperativo", "Hardware", "Textos e Imagens", "Intermediários", "Linguagens de Programação", "O modo verbal imperativo é particularmente interessante para a computação", "a"],
+  ["Estrutura de Dados", "Runtime", "Textos e Imagens", "Iniciantes", "Funcionamento das Máquinas", "Na computacao existe uma estrutura dados que ressoa no processo do pensamento humano", "a"]
 ];
 
 main();
