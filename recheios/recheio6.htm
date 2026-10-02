@@ -1,0 +1,142 @@
+<base href="https://RodrigoSchioMuniz.github.io/procedimentos/">
+<h2>Programando uma página que gera estilos</h2>
+Esse tutorial apresenta conceitos básicos de frontEnd.
+
+
+<h2>hello world</h2>
+Para começar esse projeto usamos javascript.<br><br>
+Esse código apresenta a função alert que serve para exibir uma mensagem para o usuário:
+<pre><code class="language-html">&lt;!doctype html>
+&lt;html>
+&lt;body>
+&lt;/body>
+&lt;script>
+alert("hello world"); //exibe mensagem
+&lt;/script>
+&lt;/html></code></pre>
+Textos após <b>//</b> são considerados <b>comentários</b> e não são considerados como código.
+
+
+<h2>Função</h2>
+Essa lição mostra como criar uma função.<br>
+E como chamá-la.<br><br>
+Uma função contém uma série de instruções/comandos que são executados um por um.
+<pre><code class="language-html">&lt;script>
+//alert("hello world"); //código não executado //comentado para humanos
+funcao_exemplo = function() {
+	alert("hello function");
+}
+funcao_exemplo(); //chama a função
+&lt;/script></code></pre>
+
+
+<h2>Parâmetros Argumentos</h2>
+Uma função com parâmetros/argumentos:
+<pre><code class="language-html">&lt;script>
+funcao2 = function(p1, p2) {
+	alert(p1);
+	alert(p2);
+}
+funcao2("hello parametro", 43); //chama a função (passando dois parametros)
+&lt;/script></code></pre>
+Parâmetros são valores passados para dentro da função.
+
+
+<h2>return</h2>
+O código abaixo chama a função que criamos<br>
+passando dois argumentos.<br><br>
+Nossa função <b>retorna</b> um valor numérico<br>
+para dentro da função alert
+<pre><code class="language-html">&lt;script>
+funcao = function(n1, n2) {
+	return n1 + n2 + 84;
+}
+alert(funcao(15, 72));
+&lt;/script></code></pre>
+
+
+<h2>random</h2>
+A função <b>Math.random()</b> retorna um número decimal aleatório entre 0 e 1
+<pre><code class="language-html">&lt;script>
+alert(Math.random());
+alert(Math.random() * 10);
+alert(parseInt(Math.random() * 10));
+alert(3 + parseInt(Math.random() * 17)); //um número inteiro aleatório entre 3 e 17
+&lt;/script></code></pre>
+
+
+<h2>Layout ou Interface</h2>
+Essa é a tela por onde o usuário digita a frase
+<pre><code class="language-html">&lt;!doctype html>
+&lt;html>
+&lt;body>
+&lt;input id=frase value="Digite sua frase">
+&lt;button onclick="estilo();">estilo&lt;/button>
+&lt;/body>
+&lt;script>
+estilo = function() {
+	fraseDigitada = document.getElementById('frase').value;
+	alert(fraseDigitada); //exibe mensagem
+}
+&lt;/script>
+&lt;/html></code></pre>
+
+
+<h2>css</h2>
+Essa lição atribui<br><br>
+<b>text-align<br>
+padding<br>
+color<br>
+margin<br>
+border-radius<br>
+background-color<br>
+font-size<br>
+text-transform<br>
+font-family</b><br><br>
+a algumas divs:
+<pre><code class="language-html">&lt;!doctype html>
+&lt;html>
+&lt;body>
+&lt;input id=frase value="Digite sua frase">
+&lt;button onclick="estilo(document.getElementById('frase').value);">estilo&lt;/button>
+&lt;/body>
+&lt;script>
+estilo = function(parametro1) {
+	fraseDigitada = parametro1;
+	estiloAleatorio = "text-align:center; height:40px; padding:200px 0px; color:#ffffff; margin:36px auto;";
+	estiloAleatorio = estiloAleatorio + "background-color:" + backgroundAleatorio() + ";";
+	estiloAleatorio = estiloAleatorio + "font-size:" + tamanhoLetraAleatorio() + ";";
+	estiloAleatorio = estiloAleatorio + "font-family:'" + fonteAleatorio() + "';";
+	estiloAleatorio = estiloAleatorio + "text-transform:" + transformAleatorio() + ";";
+	document.body.innerHTML = "&lt;div style=\\"" + estiloAleatorio + "\\">&lt;span style='border-radius:14px; " + frameAleatorio() + "'>" + fraseDigitada + "&lt;/span>&lt;/div>&lt;button style='position:absolute; bottom:12px; right:158px; padding:20px 50px;' onclick=\\"estilo(fraseDigitada);\\">outro&lt;/button>" + "&lt;button style='position:absolute; bottom:12px; right:12px; padding:20px 50px;' onclick=\\"location.reload();\\">voltar&lt;/button>";
+}
+backgroundAleatorio = function(){
+	return ["#264653", "#2a9d8f", "#f4a261", "#e76f51", "#606c38", "#bc6c25", "#7f5539"][parseInt(Math.random() * 7)];
+}
+tamanhoLetraAleatorio = function(){
+	return ["20px", "28px", "38px", "46px"][parseInt(Math.random() * 4)];
+}
+fonteAleatorio = function(){
+	return ["Segoe Ui", "Courier", "Verdana", "Georgia"][parseInt(Math.random() * 4)];
+}
+transformAleatorio = function(){
+	return ["lowercase", "uppercase", "capitalize", "none"][parseInt(Math.random() * 4)];
+}
+frameAleatorio = function(){
+	estiloFrame = "padding:" + paddingAleatorio() + ";";
+	if(Math.random() > .4) estiloFrame += "background-color: #000000;";
+	else estiloFrame += "border:" + borderAleatorio() + ";";
+	return estiloFrame;
+}
+paddingAleatorio = function(){
+	return ["30px", "38px", "46px", "54px"][parseInt(Math.random() * 3)];
+}
+borderAleatorio = function(){
+	return ["4px solid #ffffff", "4px dashed #ffffff"][parseInt(Math.random() * 2)];
+}
+&lt;/script>
+&lt;/html></code></pre>
+
+
+<h2>Stylish-Gen</h2>
+Os conceitos que esse tutorial apresenta estão implementados no software <a href=res/6/stylish-gen/index.html>stylish-gen</a>

@@ -1,0 +1,179 @@
+<base href="https://RodrigoSchioMuniz.github.io/procedimentos/">
+<h2>Aplicativo de Celular</h2>
+Aqui vai uma explicação detalhada do desenvolvimento de um aplicativo de celular.
+
+
+<h2>Iniciando o projeto randomExpressions</h2>
+Para começar crie um projeto novo do tipo 'Activity em Branco'.<br><br>
+
+O package name pode ser <b>random.expressions</b>
+
+
+<h2>AndroidManifest.xml</h2>
+O android:theme é modelo antigo.<br>
+O ícone vai dentro da pasta res/drawable
+<pre><code class="language-markup">&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+	&lt;application
+		android:allowBackup="true"
+		android:icon="@drawable/icon"
+		android:label="expressions"
+		android:theme="@android:style/Theme.Light.NoTitleBar"
+		android:resizeableActivity="true">
+		&lt;activity
+			android:exported="true"
+			android:name=".MainActivity"
+			android:label="expressions">
+			&lt;intent-filter>
+				&lt;action android:name="android.intent.action.MAIN" />
+				&lt;category android:name="android.intent.category.LAUNCHER" />
+			&lt;/intent-filter>
+		&lt;/activity>
+	&lt;/application>
+
+&lt;/manifest></code></pre>
+
+
+<h2>Pasta raw</h2>
+Dentro da pasta <b>/main/res/</b> vão 13 imagens e um arquivo html.<br>
+
+São arquivos que contêem os pedaços das caras que são sorteadas para serem exibidas na tela.<br><br>
+
+<a href="res/13/raw.zip" target="_blank">Extraia</a> e coloque o conteúdo na pasta <b>/main/res/raw/</b>
+
+
+<h2>Webview</h2>
+O arquivo html contém código css e javascript que misturam as imagens para gerar expressões.<br>
+Esse arquivo é renderizado em uma <b>webview</b> que é um recurso do desenvolvimento android.<br>
+Uma webview é como um pedaço de um navegador browser. A webview renderiza código html, css e js e exibe dentro do app.<br><br>
+
+Posteriormente código java tira screenshot da tela html que está renderizada na webview.
+
+
+<h2>Salvando screenshot programaticamente</h2>
+
+<pre><code class="language-java">expressionView.setDrawingCacheEnabled(true);
+Bitmap bitmap=Bitmap.createBitmap(expressionView.getDrawingCache());
+expressionView.setDrawingCacheEnabled(false);
+Intent intent=new Intent("android.intent.action.SEND");
+intent.setType("image/jpeg");
+intent.putExtra("android.intent.extra.STREAM",Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,String.valueOf((long)System.currentTimeMillis()),"expression")));
+MainActivity.this.startActivity(Intent.createChooser(intent,""));
+</code></pre>
+Esse código faz o app tirar um screenshot quando o user clica no botão.<br>
+O screenshot é salvo e aparece a opção de compartilhar.
+
+
+<h2>LinearLayout</h2>
+<b>LinearLayout</b> é um elemento android que posiciona componentes na tela do aplicativo.
+<pre><code class="language-java">LinearLayout linearLayout=new LinearLayout(this);
+linearLayout.setOrientation(linearLayout.VERTICAL);
+</code></pre>
+
+
+<h2>Webview</h2>
+<b>Webview</b> é um pedaço de uma janelinha de um navegador que vai no linearLayout.
+<pre><code class="language-java">WebView expressionView=new WebView(this);
+expressionView.getSettings().setJavaScriptEnabled(true);
+expressionView.loadUrl("file:///android_res/raw/index.html");
+linearLayout.addView(expressionView);
+</code></pre>
+
+
+<h2>Botão que tira a Screenshot</h2>
+O <b>Button</b> também é adicionado ao linearLayout.
+<pre><code class="language-java">Button button=new Button(this);
+button.setText("save");
+LinearLayout.LayoutParams lp1=new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
+lp1.gravity=Gravity.CENTER_HORIZONTAL;
+button.setLayoutParams(lp1);
+button.setHeight(120);
+button.setWidth(220);
+button.setOnClickListener(new View.OnClickListener(){public void onClick(View view){
+	expressionView.setDrawingCacheEnabled(true);
+	Bitmap bitmap=Bitmap.createBitmap(expressionView.getDrawingCache());
+	expressionView.setDrawingCacheEnabled(false);
+	Intent intent=new Intent("android.intent.action.SEND");
+	intent.setType("image/jpeg");
+	intent.putExtra("android.intent.extra.STREAM",Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,String.valueOf((long)System.currentTimeMillis()),"expression")));
+	MainActivity.this.startActivity(Intent.createChooser(intent,""));
+}});
+linearLayout.addView(button);
+</code></pre>
+
+
+<h2>ScrollView</h2>
+O <b>ScrollView</b> serve para uma situação de quando a tela precisa ser rolada.<br>
+Nesse caso provavelmente isso não acontece mas existem situações em que há mais elementos no linearLayout e para que o app exiba todos o linearLayout vai dentro da ScrollView.
+<pre><code class="language-java">ScrollView scrollView=new ScrollView(this);
+scrollView.setBackgroundColor(new Color().parseColor("#e1e8f0"));
+scrollView.addView(linearLayout);
+
+setContentView(scrollView);
+</code></pre>
+
+
+<h2>O código completo</h2>
+
+<pre><code class="language-java">package random.expressions;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebView;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.graphics.Color;
+import android.widget.RelativeLayout.LayoutParams;
+import android.view.Gravity;
+
+public class MainActivity extends Activity{
+	WebView expressionView;
+	@Override protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		LinearLayout linearLayout=new LinearLayout(this);
+		linearLayout.setOrientation(linearLayout.VERTICAL);
+		
+		expressionView=new WebView(this);
+		expressionView.getSettings().setJavaScriptEnabled(true);
+		expressionView.loadUrl("file:///android_res/raw/index.html");
+		linearLayout.addView(expressionView);
+		
+		Button button=new Button(this);
+		button.setText("save");
+		LinearLayout.LayoutParams lp1=new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
+		lp1.gravity=Gravity.CENTER_HORIZONTAL;
+		button.setLayoutParams(lp1);
+		button.setHeight(120);
+		button.setWidth(220);
+		button.setOnClickListener(new View.OnClickListener(){public void onClick(View view){
+			expressionView.setDrawingCacheEnabled(true);
+			Bitmap bitmap=Bitmap.createBitmap(expressionView.getDrawingCache());
+			expressionView.setDrawingCacheEnabled(false);
+			Intent intent=new Intent("android.intent.action.SEND");
+			intent.setType("image/jpeg");
+			intent.putExtra("android.intent.extra.STREAM",Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(),bitmap,String.valueOf((long)System.currentTimeMillis()),"expression")));
+			MainActivity.this.startActivity(Intent.createChooser(intent,""));
+		}});
+		linearLayout.addView(button);
+		
+		ScrollView scrollView=new ScrollView(this);
+		scrollView.setBackgroundColor(new Color().parseColor("#e1e8f0"));
+		scrollView.addView(linearLayout);
+		setContentView(scrollView);
+	}
+}</code></pre>
+
+
+<h2>Arquivos do Projeto</h2>
+O app <a href=res/13/expressions.zip>expressions</a> é baseado em <b>webview</b>.<br><br>
+Nesse app o código java gera uma imagem png a partir do layout de uma página exibida na tela e disponibiliza para o usuário a opção de compartilhar.
