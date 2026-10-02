@@ -67,7 +67,7 @@ function geraStilo(randomfrase, cor, fonte, quadro, bg){
 	let fontcolor = localStorage.getItem("quote-fontcolor");
 
 	let atrmoldura = "padding:0px 34px; width:100vw; height:100vh; background-image:url('texturas/" + localStorage.getItem("quote-bg") + "'); background-color:#" + bgcolor + "; display:flex; align-items:center; justify-content:center;";
-	let atrFrame = "animation:entrada 0.7s; max-width:400px; color:#" + (fontcolor == "true" ? "222222" : "dddddd") + ";";
+	let atrFrame = "animation:entrada 0.5s; max-width:400px; color:#" + (fontcolor == "true" ? "222222" : "dddddd") + ";";
 
 	let moldura="<div style=\"" + atrmoldura + "\">";
 	moldura+="<div style=\"" + atrFrame;
