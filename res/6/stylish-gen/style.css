@@ -1,3 +1,8 @@
+@keyframes entrada{
+	from{scale: 0.1;}
+	to{scale: 1;}
+}
+
 @font-face {
 	font-family: "Architects Daughter";
 	src: url(fonts/architects.ttf);
