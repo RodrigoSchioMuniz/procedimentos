@@ -1,0 +1,315 @@
+<base href="https://RodrigoSchioMuniz.github.io/procedimentos/">
+<h2>Programando um joguinho de celular</h2>
+Esse tutorial mostra como programar um simples jogo para celular.
+
+
+<h2>Código html do jogo</h2>
+Crie um arquivo chamado index.html
+<pre><code class="language-html">&lt;!doctype html>
+&lt;html>
+&lt;meta charset=UTF-8>
+&lt;meta name=viewport content='width=device-width'>
+&lt;link rel="stylesheet" href="styles.css">
+&lt;title>MineSweeper&lt;/title>
+&lt;body>
+	&lt;h1>MineSweeper&lt;/h1>
+	&lt;div id="mines" data-mines="">&lt;/div>
+	&lt;div id="grid">&lt;/div>
+	&lt;div id="text">&lt;/div>&lt;br>
+	&lt;button id="reset">Reset&lt;/button>
+	&lt;footer>&lt;div>&lt;/div>&lt;/footer>
+&lt;/body>
+&lt;script src=script.js>&lt;/script>
+&lt;/html></code></pre>
+
+
+<h2>O arquivo css</h2>
+
+<pre><code class="language-css">body {
+	background-color: #cacaca;
+	text-align: center;
+	margin: 30px;
+	font-family: "Segoe Ui";
+}
+
+h1 {
+	background-color: #101010;
+	padding: 20px;
+	font-family: "Courier";
+	text-transform: uppercase;
+	color: #ffffff;
+	text-align: center;
+}
+
+footer {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+}
+
+footer div {
+	margin:30px;
+	background-color: #101010;
+	padding: 30px;
+}
+
+
+#grid {
+	margin-top: 12px;
+	margin-bottom: 20px;
+	display: grid;
+	justify-content: center;
+	grid-template-columns: repeat(3, 30px);
+	grid-template-rows: repeat(3, 30px);
+}
+
+#mines {
+	color: #555555;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+#reset {
+	padding: 10px;
+}
+
+.cell {
+	background-color: #999999;
+	font-size: 0;
+	border: 1px solid #222222;
+	border-radius: 4px;
+	padding: 8px;
+}
+
+.visible {
+	font-size: 16px;
+	background-color: #bbbbbb;
+	outline: none;
+	box-shadow: inset 0px 0px 5px #c1c1c1;
+}
+
+.flag {
+	background-color: #444444;
+}
+
+.visible.mine {
+	background-color: #ffffff;
+}</code></pre>
+
+
+<h2>O arquivo js</h2>
+Na função <b>resetBoard</b> vai o código que desenha o jogo.
+<pre><code class="language-javascript">const grid = document.getElementById("grid");
+var gameOver = false;
+
+var resetBoard = function() {
+	document.getElementById('text').innerHTML = '';
+
+	grid.style.setProperty('grid-template-columns', 'repeat(10, 30px)');
+	grid.style.setProperty('grid-template-rows', 'repeat(10, 30px)');
+
+	grid.innerHTML = '';
+	for (var i = 0; i &lt; 100; i++) {
+		const cell = document.createElement("button");
+		cell.className = 'cell';
+
+		grid.appendChild(cell);
+	}
+	cells = grid.getElementsByClassName("cell");
+	for (var i = 0; i &lt; cells.length; i++) {
+		cells[i].className = 'cell';
+		cells[i].innerHTML = '';
+		cells[i].addEventListener('click', clickCell, false);
+		cells[i].oncontextmenu = clickFlag;
+	}
+	gameOver = false;
+
+	placeMines();
+	placeNums();
+};</code></pre>
+
+As duas últimas linhas de dentro da função resetBoard chamam funções que colocam as bombas e os números no tabuleiro.<br>
+placeMines e placeNums são funções que serão descritas nesse tutorial.<br><br>
+
+O código abaixo deve estar no final do arquivo javascript. Ele vincula o botão com a função que desenha o tabuleiro.<br>
+Na linha seguinte o código chama/invoca ela (resetBoard).
+
+<pre><code class="language-javascript">document.getElementById('reset').addEventListener('click', resetBoard);
+resetBoard();</code></pre>
+
+
+<h2>getImmediateNeighbors</h2>
+Essa função retorna as minas que existem nas adjacências.
+<pre><code class="language-javascript">var getImmediateNeighbors = function(cell) {
+	const i = [...cells].indexOf(cell);
+	let topRow = true;
+	let bottomRow = false;
+	const neighbors = [];
+
+	if (i > 9) {
+		topRow = false;
+		neighbors.push(cells[i-10]);
+	}
+	if (i &lt; 90) {
+		neighbors.push(cells[i+10]);
+	}
+	else bottomRow = true;
+	if (i % 10 != 0) {
+		neighbors.push(cells[i-1]);
+		if (!topRow) neighbors.push(cells[i-11]);
+		if (!bottomRow) neighbors.push(cells[i+9]);
+	}
+	if (i % 10 != 9) {
+		neighbors.push(cells[i+1]);
+		if (!topRow) neighbors.push(cells[i-9]);
+		if (!bottomRow) neighbors.push(cells[i+11]);
+	}
+	return neighbors;
+};</code></pre>
+
+
+<h2>placeMines & placeNums</h2>
+A função placeMines distribui 20 minas pela grid.
+<pre><code class="language-javascript">var placeMines = function() {
+	const cells = document.getElementsByClassName("cell");
+	const minesI = [];
+
+	// Get unique random indexes to place the mines
+	mines_count = 20;
+	const mines_text = document.getElementById("mines");
+	mines_text.setAttribute("data-mines", mines_count);
+	mines_text.innerHTML = mines_count + " mines left";
+	hidden = 100;
+	while (minesI.length &lt; mines_count) {
+		var I = Math.floor(Math.random() * cells.length);
+		if (minesI.indexOf(I) === -1) minesI.push(I);
+	}
+
+	// Set the cells with mines according to the indexes in the minesI array
+	for (var i = 0; i &lt; minesI.length; i++) {
+		cells[minesI[i]].classList.add("mine");
+		cells[minesI[i]].innerHTML = "X";
+	}
+};</code></pre>
+A função placeNums exibe a quantidade de bombas nas adjacências.
+<pre><code class="language-javascript">var placeNums = function() {
+	for (var i = 0; i &lt; cells.length; i++) {
+		if (cells[i].classList.contains('mine')) continue;
+
+		let neighbors = getImmediateNeighbors(cells[i]);
+		let count = 0;
+		for (var j = 0; j &lt; neighbors.length; j++) {
+			count += neighbors[j].classList.contains('mine');
+		}
+
+		cells[i].innerHTML = count > 0 ? count : '';
+	}
+};</code></pre>
+
+
+<h2>clickFlag & clickCell</h2>
+A função resetBoard atribui a chamada da função clickCell ao evento 'click' nas células/botões.
+<pre><code class="language-javascript">var clickCell = function() {
+	if (gameOver) return;
+	if (this.classList.contains('visible')) return;
+	if (this.classList.contains('flag')) return;
+
+	this.classList.add('visible');
+	hidden = hidden - 1;
+
+	if (this.classList.contains('mine')) {
+		document.getElementById('text').innerHTML = "Game Over";
+		gameOver = true;
+		return;
+	}
+
+	if (hidden === mines_count) {
+		document.getElementById('text').innerHTML = "You Won !";
+		gameOver = true;
+		return;
+	}
+
+	if (this.childNodes.length === 0) {
+		let neighbors = getImmediateNeighbors(this);
+		for (var i = 0; i &lt; neighbors.length; i++) {
+			neighbors[i].click();
+		}
+	}
+};</code></pre>
+A função resetBoard atribui a chamada da função clickFlag ao evento 'right click' nas células/botões. (cells[i].oncontextmenu=clickFlag)
+<pre><code class="language-javascript">var clickFlag = function() {
+	if (gameOver) return;
+	if (this.classList.contains('visible')) return;
+
+	mines_text = document.getElementById("mines");
+	const mines_count = Number(mines_text.getAttribute("data-mines"));
+	if (this.classList.contains('flag')) {
+		this.classList.remove('flag');
+		mines_text.setAttribute("data-mines", mines_count + 1);
+		mines_text.innerHTML = (mines_count + 1) + " mines left";
+	}
+	else {
+		this.classList.add('flag');
+		mines_text.setAttribute("data-mines", mines_count - 1);
+		mines_text.innerHTML = (mines_count - 1) + " mines left";
+	}
+
+	return false;
+};</code></pre>
+
+
+<h2>Teste</h2>
+Antes de colocarmos essa página no app é preciso confirmar que ela está funcionando legal.
+
+
+<h2>Android Studio</h2>
+Inicie um novo projeto.<br>
+Uma '<b>activity em branco</b>' com o package name sendo <b>campo.minado</b>.
+
+
+<h2>A pasta 'res'</h2>
+Acesse a pasta do projeto<br>
+Encontre dentro dela a pasta 'res' e delete todas as pastas que estão dentro
+<br><br><img class=imagem src=res/4/screenshot2.png onclick="window.open(this.src,'_blank');"><br><br>
+Crie uma pasta chamada drawable e coloque dentro um 'png' que vai ser o icone do app.
+<br><br><img class=imagem src=res/4/icon.png onclick="window.open(this.src,'_blank');"><br><br>
+Crie uma pasta <b>raw</b> (também dentro da /res/) e coloque dentro da /res/raw/ o arquivo html, o arquivo css e o arquivo js.
+
+
+<h2>O arquivo manifest</h2>
+O arquivo manifest é um arquivo de configuração.<br><br>
+É preciso setar (no manifest) o ícone, o 'tema' e rótulo
+<pre><code class="language-markup">android:icon="@drawable/icon"</code></pre>
+<pre><code class="language-markup">android:theme="@android:style/Theme.Light.NoTitleBar"</code></pre>
+<pre><code class="language-markup">android:label="Campo Minado"</code></pre>
+
+
+<h2>Compilando</h2>
+Já é possível gerar um app mas por enquanto ele ainda não exibe os arquivos html
+
+
+<h2>Arquivo código java</h2>
+Falta incluir (no MainActivity) o código java que coloca a página no app
+<pre><code class="language-java">package tutorial.campominado;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebView;
+
+public class MainActivity extends Activity {
+	@Override protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		WebView gameView;
+		gameView=new WebView(this);
+		gameView.getSettings().setJavaScriptEnabled(true);
+		gameView.loadUrl("file:///android_res/raw/index.html");
+		setContentView(gameView);
+	}
+}
+</code></pre>
+
+
+<h2>Projeto Montado</h2>
+Arquivos do projeto <a href=res/4/campominado.zip>Campo Minado</a>
