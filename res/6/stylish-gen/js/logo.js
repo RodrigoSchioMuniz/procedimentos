@@ -51,7 +51,7 @@ function geraStilo(cor, fonte, quadro, icone) {
 	let bgcolor = localStorage.getItem("logo-bgcolor");
 	let fontcolor = localStorage.getItem("logo-fontcolor");
 
-	let moldura = "\n<div style='";
+	let moldura = "\n<div style='animation:entrada 1s; ";
 	moldura += "border-radius:" + localStorage.getItem("logo-border-radius") + "px;";
 	moldura += " padding:" + localStorage.getItem("logo-padding") + "px;";
 
@@ -79,26 +79,28 @@ function geraStilo(cor, fonte, quadro, icone) {
 	nome += " text-transform:" + localStorage.getItem("logo-text-transform") + ";";
 	nome += "\">" + localStorage.getItem("logo-nome").replace(/\</g, '&lt;').replace(/\n/g, '<br>').replace(/  /g, ' &nbsp;') + "</span>";
 
-	let logo = "\n\t<img src='https://baideruls.github.io/Procedimentos/res/6/stylish-gen/" + (fontcolor == "true" ? "iconesescuros" : "iconesclaros") + "/" + localStorage.getItem("logo-logo") + ".svg'>";
+	let logo = "\n\t<img src='https://RodrigoSchioMuniz.github.io/procedimentos/res/6/stylish-gen/" + (fontcolor == "true" ? "iconesescuros" : "iconesclaros") + "/" + localStorage.getItem("logo-logo") + ".svg'>";
 
 	let attrContainer = "padding:0px 34px; width:100%; height:100%; background-color:#" + bgcolor + "; display:flex; align-items:center; justify-content:center;";
-	importFont = "<style>@import url('https://fonts.googleapis.com/css2?family=" + localStorage.getItem("logo-font-family") + "&display=swap');</style>\n";
+	css = "<style>\n@import url('https://fonts.googleapis.com/css2?family=" + localStorage.getItem("logo-font-family") + "&display=swap');\n@keyframes entrada{\n\tfrom{scale: 0.1;}\n\tto{scale: 1;}\n}\n</style>\n";
 	container = "<div style='" + attrContainer + "'>" + moldura + "'>";
 	container += localStorage.getItem("logo-logopos") == '0' ? logo + nome : nome + logo;
 	container += "\n</div></div>";
 
-	botoes = "<div id=botoes>";
-	botoes += "<button style='position:fixed; bottom:69px; height:30px; right:128px; width:122px;' onclick=\"geraStilo(true, true, true, true);\">outro</button>";
-	botoes += "<button style='position:fixed; bottom:69px; height:30px; right:4px; width:122px;' onclick=\"telaEdicao();\">editar</button>";
+	let stylebutton = "background-color:#" + bgcolor + "; border: 1px solid #" + (fontcolor == "true" ? "222222" : "dddddd") + "; color:#" + (fontcolor == "true" ? "222222" : "dddddd") + "; position:fixed;";
+	let botoes = "<div id=botoes>";
+	botoes += "<button style='" + stylebutton + " bottom:69px; height:30px; right:128px; width:122px;' onclick=\"geraStilo(true, true, true, true);\">outro</button>";
+	botoes += "<button style='" + stylebutton + " bottom:69px; height:30px; right:4px; width:122px;' onclick=\"telaEdicao();\">editar</button>";
 
-	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:190px; width:60px;' onclick=\"geraStilo(true, false, false, false);\">cor</button>";
-	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:128px; width:60px;' onclick=\"geraStilo(false, true, false, false);\">text</button>";
-	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:66px; width:60px;' onclick=\"geraStilo(false, false, true, false);\">frame</button>";
-	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:4px; width:60px;' onclick=\"geraStilo(false, false, false, true);\">icon</button>";
+	botoes += "<button style='" + stylebutton + " bottom:36px; height:30px; right:190px; width:60px;' onclick=\"geraStilo(true, false, false, false);\">cor</button>";
+	botoes += "<button style='" + stylebutton + " bottom:36px; height:30px; right:128px; width:60px;' onclick=\"geraStilo(false, true, false, false);\">text</button>";
+	botoes += "<button style='" + stylebutton + " bottom:36px; height:30px; right:66px; width:60px;' onclick=\"geraStilo(false, false, true, false);\">frame</button>";
+	botoes += "<button style='" + stylebutton + " bottom:36px; height:30px; right:4px; width:60px;' onclick=\"geraStilo(false, false, false, true);\">icon</button>";
 
-	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:4px; width:80px;' onclick=\"document.body.requestFullscreen();\">full</button>";
-	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:86px; width:82px;' onclick=\"location='index.html';\">frase</button>";
-	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:170px; width:80px;' onclick=\"savelogo(importFont, container);\">save</button></div>";
+	botoes += "<button style='" + stylebutton + " bottom:3px; height:30px; right:4px; width:60px;' onclick=\"document.body.requestFullscreen();\">full</button>";
+	botoes += "<button style='" + stylebutton + " bottom:3px; height:30px; right:66px; width:60px;' onclick=\"location='face.html';\">face</button>";
+	botoes += "<button style='" + stylebutton + " bottom:3px; height:30px; right:128px; width:60px;' onclick=\"location='index.html';\">frase</button>";
+	botoes += "<button style='" + stylebutton + " bottom:3px; height:30px; right:190px; width:60px;' onclick=\"savelogo(css, container);\">save</button></div>";
 
 	document.body.innerHTML = container + botoes;
 }
@@ -113,6 +115,10 @@ function ototom(c) {
 			return localStorage.getItem("logo-fontcolor") == "true" ? hclara[x] : hescura[x];
 		}
 	}
+}
+
+function bgototom(bgcolor) {
+	return "background-color:#" + ototom(bgcolor[0]) + bgcolor[1] + ototom(bgcolor[2]) + bgcolor[3] + ototom(bgcolor[4]) + bgcolor[5] + ";";
 }
 
 function savelogo(f, c){
