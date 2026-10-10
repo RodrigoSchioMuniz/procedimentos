@@ -20,8 +20,7 @@ A encriptação e decriptação são baseadas em chaves tokens que servem també
 Atualmente quase toda informação que trafega pela internet é protegida por esse algoritmo ou alguma forma variada dele.
 
 
-<h2>Código-Fonte Simplificado</h2>
-Aqui vai uma implementação demonstrativa.<br><br>
+<h2>Implementação demonstrativa com a linguagem C</h2>
 <pre><code class="language-c">#include &lt;stdio.h>
 #include &lt;stdlib.h>
 #include &lt;time.h>
@@ -35,7 +34,7 @@ int euc_ext(int valor, int denominador, int *x, int *y) {
     }
 
     int x1, y1;
-    int g = euc_ext(denominador, valor % denominador, &x1, &y1);
+    int g = euc_ext(denominador, valor % denominador, &amp;x1, &amp;y1);
 
     *x = y1;
     *y = x1 - (valor / denominador) * y1;
@@ -46,7 +45,7 @@ int euc_ext(int valor, int denominador, int *x, int *y) {
 // Inverso modular usando Euclides Estendido
 int mod_inv(int valor, int modulo) {
     int x, y;
-    int g = euc_ext(valor, modulo, &x, &y);
+    int g = euc_ext(valor, modulo, &amp;x, &amp;y);
 
     if (g != 1) {
         return 0; // não existe inverso
@@ -66,7 +65,7 @@ int mod_exp(int base, int exp, int mod) {
     int b = base % mod;
 
     while (exp > 0) {
-        if (exp & 1) {
+        if (exp &amp; 1) {
             result = (result * b) % mod;
         }
         b = (b * b) % mod;
@@ -88,7 +87,7 @@ int max_div(int a, int b) {
 
 // Lista de primos pequenos
 int primos[] = {
-     7,  11,  13,  17,  19,  23,  29,  31,  37,  41, 
+     7,  11,  13,  17,  19,  23,  29,  31,  37,  41,
     43,  47,  53,  59,  61,  67,  71,  73,  79,  83,
     89,  97, 101, 103, 107, 109, 113, 127, 131, 137,
    139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
@@ -115,14 +114,14 @@ int main(void) {
     int phi = (p - 1) * (q - 1);
 
     int e = 3;
-    while (e &lt; phi && max_div(e, phi) != 1) {
+    while (e &lt; phi &amp;&amp; max_div(e, phi) != 1) {
         e += 2;
     }
 
     int d = mod_inv(e, phi);
 
-    printf("\\nPublic key  (e, n): (%-7d, %d)\\n", e, n); // Essa serve para 'alguém' criptografar algo que apenas o receptor entenderá
-    printf("Private key (d, n): (%-7d, %d)\\n\\n", d, n); // Essa o receptor não envia
+    printf("\\nPublic key  (e, n): (%-7d, %d) Essa serve para 'alguem' criptografar algo que apenas o receptor entendera\\n", e, n);
+    printf("Private key (d, n): (%-7d, %d) Essa o receptor nao envia\\n\\n", d, n);
 
     // EMISSOR CRIPTOGRAFA A MENSAGEM
     char *mensagem = "Internet Revolution";
@@ -138,7 +137,7 @@ int main(void) {
     }
 
     // LOG DEMONSTRATIVO
-    printf("Mensagem original: \\\"%s\\\"\\n\\n", mensagem);
+    printf("Mensagem original: \\"%s\\"\\n\\n", mensagem);
     printf("Cifrado:\\n");
     for (size_t i = 0; i &lt; len; ++i) {
         printf("%d ", cifrado[i]);
@@ -152,11 +151,134 @@ int main(void) {
     }
 
     // LOG DEMONSTRATIVO
-    printf("Decifrado: \\\"");
+    printf("Decifrado: \\"");
     for (size_t i = 0; i &lt; len; ++i) {
         putchar(decifrado[i]);
     }
-    printf("\\\"\\n");
+    printf("\\"\\n");
 
     return 0;
 }</code></pre>
+
+
+<h2>Implementação demonstrativa com nodeJs</h2>
+<pre><code class="language-javascript">// Algoritmo de Euclides Estendido
+function eucExt(valor, denominador) {
+    if (denominador === 0) {
+        return { gcd: valor, x: 1, y: 0 };
+    }
+
+    const { gcd: g, x: x1, y: y1 } = eucExt(denominador, valor % denominador);
+
+    const x = y1;
+    const y = x1 - Math.floor(valor / denominador) * y1;
+
+    return { gcd: g, x, y };
+}
+
+// Inverso modular usando Euclides Estendido
+function modInv(valor, modulo) {
+    const { gcd: g, x } = eucExt(valor, modulo);
+
+    if (g !== 1) {
+        return 0; // não existe inverso
+    }
+
+    let res = x % modulo;
+    if (res &lt; 0) {
+        res += modulo;
+    }
+
+    return res;
+}
+
+// Exponenciação modular rápida
+function modExp(base, exp, mod) {
+    let result = 1 % mod;
+    let b = base % mod;
+
+    while (exp > 0) {
+        if (exp &amp; 1) {
+            result = (result * b) % mod;
+        }
+        b = (b * b) % mod;
+        exp >>= 1;
+    }
+
+    return result;
+}
+
+// Máximo divisor comum (para verificar coprimalidade)
+function maxDiv(a, b) {
+    while (b !== 0) {
+        const t = a % b;
+        a = b;
+        b = t;
+    }
+    return a;
+}
+
+// Lista de primos pequenos
+const primos = [
+     7,  11,  13,  17,  19,  23,  29,  31,  37,  41,
+    43,  47,  53,  59,  61,  67,  71,  73,  79,  83,
+    89,  97, 101, 103, 107, 109, 113, 127, 131, 137,
+   139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
+   193, 197, 199, 211, 223, 227, 229, 233, 239, 241
+];
+
+// Escolhe um primo aleatório da lista
+function randomPrimo() {
+    const total = primos.length;
+    return primos[Math.floor(Math.random() * total)];
+}
+
+// RECEPTOR GERA KEYS
+let p = randomPrimo();
+let q;
+do {
+	q = randomPrimo();
+} while (q === p);
+
+const n = p * q;
+const phi = (p - 1) * (q - 1);
+
+let e = 3;
+while (e &lt; phi &amp;&amp; maxDiv(e, phi) !== 1) {
+	e += 2;
+}
+
+const d = modInv(e, phi);
+
+console.log("\\nPublic key  (e, n): (" + String(e).padEnd(7) + ", " + n + ") Essa serve para 'alguém' criptografar algo que apenas o receptor entenderá");
+console.log("Private key (d, n): (" + String(d).padEnd(7) + ", " + n + ") Essa o receptor não envia\\n");
+
+// EMISSOR CRIPTOGRAFA A MENSAGEM
+const mensagem = "Internet Revolution";
+
+const cifrado = [];
+for (let i = 0; i &lt; mensagem.length; i++) {
+	cifrado.push(modExp(mensagem.charCodeAt(i), e, n));
+}
+
+// LOG DEMONSTRATIVO
+console.log("Mensagem original:");
+console.log(mensagem);
+
+console.log("\\nCifrado:");
+console.log(cifrado.join(" "));
+console.log("");
+
+// RECEPTOR DECIFRA
+const decifrado = [];
+for (let i = 0; i &lt; mensagem.length; i++) {
+	decifrado.push(modExp(cifrado[i], d, n));
+}
+
+// LOG DEMONSTRATIVO
+console.log("Decifrado:");
+for (let i = 0; i &lt; mensagem.length; i++) {
+	process.stdout.write(String.fromCharCode(decifrado[i]));
+}
+console.log("");
+</code></pre>

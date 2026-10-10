@@ -145,7 +145,7 @@ procedimentos = [
   ["Site Instalável", "Desktop", "PWA", "Iniciantes", "Progressive Web Application", "Como programar e publish uma página PWA", "d"],
   ["Everywhere", "Desktop", "hta", "Intermediários", "Jogo de desviar dos objetos", "Usando javascript html e css para programar um joguinho que funciona em computadores com windows", "d"],
   ["Empurrador de Caixas", "Desktop", "C", "Avançados", "Programar no software Poly", "Comandos e conceitos básicos sobre desenvolvimento de games", "d"],
-  ["Criptografia RSA", "Web", "C", "Avançados", "Protocolo de Comunicação", "Nas requisições pela internet um algoritmo interessante impede intermediários de acessarem dados", "e"],
+  ["Criptografia RSA", "Web", "nodeJs e Linguagem C", "Avançados", "Protocolo de Comunicação", "Nas requisições pela internet um algoritmo interessante impede intermediários de acessarem dados", "e"],
   ["Modo Imperativo", "Hardware", "Textos e Imagens", "Intermediários", "Linguagens de Programação", "O modo verbal imperativo é particularmente interessante para a computação", "a"],
   ["Estrutura de Dados", "Runtime", "Textos e Imagens", "Iniciantes", "Funcionamento das Máquinas", "Na computacao existe uma estrutura dados que ressoa no processo do pensamento humano", "a"]
 ];
