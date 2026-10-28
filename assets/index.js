@@ -71,7 +71,7 @@ function listacategorias(c) {
     }
   }
 
-  conteudo += "<article " + pisca(x) + " onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2><marquee>Como programar uma IA</marquee></h2><span class=badge> * Tutorial Externo</span><br><br><div class=subtitulo><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
+  conteudo += "<article " + pisca(x) + " onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2><marquee>Programado uma IA **DESDE O ZERO**</marquee></h2><span class=badge> * Tutorial Externo</span><br><br><div class=subtitulo><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
 
   conteudo += "<h3>Indo Além do Source Code</h3>";
   for (x = 0; x < procedimentos.length; x++) {
