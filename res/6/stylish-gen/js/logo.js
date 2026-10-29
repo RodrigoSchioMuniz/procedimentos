@@ -96,9 +96,10 @@ function geraStilo(cor, fonte, quadro, icone) {
 	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:66px; width:60px;' onclick=\"geraStilo(false, false, true, false);\">frame</button>";
 	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:4px; width:60px;' onclick=\"geraStilo(false, false, false, true);\">icon</button>";
 
-	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:4px; width:80px;' onclick=\"document.body.requestFullscreen();\">full</button>";
-	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:86px; width:82px;' onclick=\"location='index.html';\">frase</button>";
-	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:170px; width:80px;' onclick=\"savelogo(css, container);\">save</button></div>";
+	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:4px; width:60px;' onclick=\"document.body.requestFullscreen();\">full</button>";
+	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:66px; width:60px;' onclick=\"location='face.html';\">face</button>";
+	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:128px; width:60px;' onclick=\"location='index.html';\">frase</button>";
+	botoes += "<button style='position:fixed; bottom:3px; height:30px; right:190px; width:60px;' onclick=\"savelogo(css, container);\">save</button></div>";
 
 	document.body.innerHTML = container + botoes;
 }

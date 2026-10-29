@@ -96,8 +96,8 @@ function geraStilo(randomfrase, cor, fonte, quadro, bg){
 	}
 
 	let botoes="<div id=botoes>";
-	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:170px; width:82px;' onclick=\"geraStilo(true, true, true, true, true);\">outro "+(lngPtBr?"pt":"en")+"</button>";
-	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:86px; width:80px;' onclick=\"geraStilo(false, true, true, true, true);\">outro</button>";
+	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:170px; width:80px;' onclick=\"geraStilo(true, true, true, true, true);\">outro "+(lngPtBr?"pt":"en")+"</button>";
+	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:86px; width:82px;' onclick=\"geraStilo(false, true, true, true, true);\">outro</button>";
 	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:4px; width:80px;' onclick=\"telaEdicao();\">editar</button>";
 
 	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:190px; width:60px;' onclick=\"geraStilo(false, true, false, false, false);\">cor</button>";
@@ -105,10 +105,11 @@ function geraStilo(randomfrase, cor, fonte, quadro, bg){
 	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:66px; width:60px;' onclick=\"geraStilo(false, false, false, true, false);\">frame</button>";
 	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:4px; width:60px;' onclick=\"geraStilo(false, false, false, false, true);\">bg</button>";
 
-	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:4px; width:60px;' onclick=\"document.body.requestFullscreen();\">full</button>";
-	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:66px; width:60px;' onclick=\"location='logo.html';\">logo</button>";
-	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:128px; width:60px;' onclick=\"lngPtBr=false;geraStilo(true, false, false, false);\">en</button>";
-	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:190px; width:60px;' onclick=\"lngPtBr=true;geraStilo(true, false, false, false);\">pt</button></div>";
+	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:4px; width:48px;' onclick=\"document.body.requestFullscreen();\">full</button>";
+	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:54px; width:48px;' onclick=\"location='face.html';\">face</button>";
+	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:104px; width:48px;' onclick=\"location='logo.html';\">logo</button>";
+	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:154px; width:48px;' onclick=\"lngPtBr=false;geraStilo(true, false, false, false);\">en</button>";
+	botoes+="<button style='position:fixed; bottom:3px; height:30px; right:204px; width:48px;' onclick=\"lngPtBr=true;geraStilo(true, false, false, false);\">pt</button></div>";
 
 	document.body.innerHTML = moldura + "\">" + localStorage.getItem("quote-frase").replace(/\</g, '&lt;').replace(/\n/g, '<br>').replace(/  /g, ' &nbsp;')+"</div></div>" + botoes;
 }

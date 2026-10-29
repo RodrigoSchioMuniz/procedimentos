@@ -1,3 +1,11 @@
+@keyframes exibition0{from{transform:rotateX(90deg);}to{transform:rotateX(0deg);}}
+@keyframes exibition1{from{transform:rotateY(90deg);}to{transform:rotateY(0deg);}}
+@keyframes exibition2{from{scale:.1;}to{scale:1;}}
+@keyframes exibition3{0%{opacity:0;}40%{opacity:1;}70%{opacity:0;}100%{opacity:1;}}
+@keyframes exibition4{from{margin-right:800px;transform:rotateZ(170deg);}to{margin-right:0px;transform:rotateZ(0deg);}}
+@keyframes exibition5{from{scale:.3;transform:rotateZ(170deg);}to{scale:1;transform:rotateY(0deg);}}
+@keyframes exibition6{from{scale:.3;transform:rotateZ(190deg);}to{scale:1;transform:rotateY(360deg);}}
+
 @keyframes entrada{
 	from{scale: 0.1;}
 	to{scale: 1;}
