@@ -96,8 +96,9 @@ function geraStilo(randomfrase, cor, fonte, quadro, bg){
 	}
 
 	let botoes="<div id=botoes>";
-	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:128px; width:122px;' onclick=\"geraStilo(false, true, true, true, true);\">outro</button>";
-	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:4px; width:122px;' onclick=\"telaEdicao();\">editar</button>";
+	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:170px; width:82px;' onclick=\"geraStilo(true, true, true, true, true);\">outro "+(lngPtBr?"pt":"en")+"</button>";
+	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:86px; width:80px;' onclick=\"geraStilo(false, true, true, true, true);\">outro</button>";
+	botoes+="<button style='position:fixed; bottom:69px; height:30px; right:4px; width:80px;' onclick=\"telaEdicao();\">editar</button>";
 
 	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:190px; width:60px;' onclick=\"geraStilo(false, true, false, false, false);\">cor</button>";
 	botoes += "<button style='position:fixed; bottom:36px; height:30px; right:128px; width:60px;' onclick=\"geraStilo(false, false, true, false, false);\">text</button>";
