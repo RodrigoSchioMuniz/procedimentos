@@ -51,7 +51,7 @@ function geraStilo(cor, fonte, quadro, icone) {
 	let bgcolor = localStorage.getItem("logo-bgcolor");
 	let fontcolor = localStorage.getItem("logo-fontcolor");
 
-	let moldura = "\n<div style='animation:entrada 0.5s; ";
+	let moldura = "\n<div style='animation:entrada 1s; ";
 	moldura += "border-radius:" + localStorage.getItem("logo-border-radius") + "px;";
 	moldura += " padding:" + localStorage.getItem("logo-padding") + "px;";
 
@@ -82,7 +82,7 @@ function geraStilo(cor, fonte, quadro, icone) {
 	let logo = "\n\t<img src='https://RodrigoSchioMuniz.github.io/procedimentos/res/6/stylish-gen/" + (fontcolor == "true" ? "iconesescuros" : "iconesclaros") + "/" + localStorage.getItem("logo-logo") + ".svg'>";
 
 	let attrContainer = "padding:0px 34px; width:100%; height:100%; background-color:#" + bgcolor + "; display:flex; align-items:center; justify-content:center;";
-	css = "<style>\n@import url('https://fonts.googleapis.com/css2?family=" + localStorage.getItem("logo-font-family") + "&display=swap');\n@keyframes entrada{\t\nfrom{scale: 0.1;}\t\nto{scale: 1;}\n}\n</style>\n";
+	css = "<style>\n@import url('https://fonts.googleapis.com/css2?family=" + localStorage.getItem("logo-font-family") + "&display=swap');\n@keyframes entrada{\n\tfrom{scale: 0.1;}\n\tto{scale: 1;}\n}\n</style>\n";
 	container = "<div style='" + attrContainer + "'>" + moldura + "'>";
 	container += localStorage.getItem("logo-logopos") == '0' ? logo + nome : nome + logo;
 	container += "\n</div></div>";
