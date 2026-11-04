@@ -53,11 +53,13 @@ function geraFace(background, cor, shape, face) {
 	ctx.fillStyle="#" + bgcolor;
 	ctx.fillRect(0,0,232,232);
 	img = new Image();
-	img.onload = function() {ctx.drawImage(img, 160 * localStorage.getItem("face-shape"), 160 * localStorage.getItem("face-cor"), 160, 160, 36, 36, 160, 160);};
+	img.onload = function() {
+		ctx.drawImage(img, 160 * localStorage.getItem("face-shape"), 160 * localStorage.getItem("face-cor"), 160, 160, 36, 36, 160, 160);
+		img2 = new Image();
+		img2.onload = function() {ctx.drawImage(img2, 0, 90 * localStorage.getItem("face-face"), 120, 90, 38 + parseInt(localStorage.getItem("face-pos-y")), 38 + parseInt(localStorage.getItem("face-pos-x")), 120, 90);};
+		img2.src = "images/expressions.png";
+	}
 	img.src = "images/shapes.png";
-	img2 = new Image();
-	img2.onload = function() {ctx.drawImage(img2, 0, 90 * localStorage.getItem("face-face"), 120, 90, 38 + parseInt(localStorage.getItem("face-pos-y")), 38 + parseInt(localStorage.getItem("face-pos-x")), 120, 90);};
-	img2.src = "images/expressions.png";
 }
 
 function savelogo(){
