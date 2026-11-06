@@ -9,7 +9,7 @@ a {
 }
 
 article {
-  border: 1px dashed #323232;
+  border: 1px dashed #2c2c2c;
   border-radius: 8px;
   padding: 20px;
   background: none;
@@ -35,7 +35,7 @@ h1 {
 
 h2 {
   align-items: center;
-  border-bottom: 1px dashed #323232;
+  border-bottom: 1px dashed #2c2c2c;
   color: #c74207;
   display: flex;
   font-size: 18px;
@@ -55,7 +55,7 @@ h3 {
 
 header {
   background: none;
-  border: 1px dashed #323232;
+  border: 1px dashed #2c2c2c;
   border-radius: 4px;
   cursor: pointer;
   padding: 12px 32px 24px;
