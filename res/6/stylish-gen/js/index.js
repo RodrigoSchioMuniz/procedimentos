@@ -60,7 +60,7 @@ function geraStilo(randomfrase, cor, fonte, quadro, bg){
 	}
 
 	if(bg) {
-		localStorage.setItem("quote-bg", parseInt(Math.random()*48));
+		localStorage.setItem("quote-bg", parseInt(Math.random()*60));
 	}
 
 	let bgcolor = localStorage.getItem("quote-bgcolor");
