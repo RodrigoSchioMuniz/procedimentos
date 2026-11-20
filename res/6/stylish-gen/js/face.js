@@ -33,7 +33,7 @@ function geraFace(background, cor, shape, face) {
 	}
 
 	let container="<div style=\"padding:0px 34px; width:100vw; height:100vh; background-color:#" + bgcolor + "; display:flex; align-items:center; justify-content:center;\">";
-	container += "<canvas width=232 height=232 style='animation:exibition" + parseInt(Math.random() * 7) + " 1s; background-color:#" + bgcolor + ";' id=canvas></canvas>";
+	container += "<canvas width=232 height=232 style='animation:exibition" + parseInt(Math.random() * 6) + " 1s; background-color:#" + bgcolor + ";' id=canvas></canvas>";
 	container += "</div>";
 
 	let stylebutton = "background-color:#" + bgcolor + "; border: 1px solid #" + (localStorage.getItem("face-fontcolor") == "true" ? "222222" : "dddddd") + "; color:#" + (localStorage.getItem("face-fontcolor") == "true" ? "222222" : "dddddd") + "; position:fixed;";

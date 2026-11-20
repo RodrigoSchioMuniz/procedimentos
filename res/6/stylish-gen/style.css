@@ -109,8 +109,8 @@ body {
 }
 
 @keyframes exibition4{
-	from{margin-right: 800px; transform: rotateZ(170deg);}
-	to{margin-right: 0px; transform: rotateZ(0deg);}
+	from{scale: .3; transform: rotateZ(190deg);}
+	to{scale: 1; transform: rotateY(360deg);}
 }
 
 @keyframes exibition5{
@@ -118,7 +118,3 @@ body {
 	to{scale: 1; transform: rotateY(0deg);}
 }
 
-@keyframes exibition6{
-	from{scale: .3; transform: rotateZ(190deg);}
-	to{scale: 1; transform: rotateY(360deg);}
-}
