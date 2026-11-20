@@ -41,7 +41,7 @@ function main() {
         conteudo += "<article><h2>" + posicao(x) + etapa + "<br></article><br>";
       }
 
-      conteudo += "<article class=links>";
+      conteudo += "<article class='links'>";
       conteudo += "<div id='coment'><div id='disqus_thread'></div></div>";
       conteudo += "<a onclick=\"(document.head || document.body).appendChild(s); this.style.display = 'none';\">Comentários</a>\n";
       conteudo += "<a onclick=\"location.hash = '';\">Página Inicial</a>";
@@ -64,7 +64,7 @@ function main() {
 
 function listacategorias(c) {
   conteudo = "";
-  conteudo += "<div class=links>";
+  conteudo += "<div class='links'>";
   conteudo += "<a onclick=\"listacategorias('w');\">web</a> &nbsp; ";
   conteudo += "<a onclick=\"listacategorias('d');\">desktop</a> &nbsp; ";
   conteudo += "<a onclick=\"listacategorias('m');\">mobile</a> &nbsp; ";
@@ -86,7 +86,7 @@ function listacategorias(c) {
     }
   }
 
-  conteudo += "<article " + pisca(x) + " onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2><marquee>Programado uma IA **DESDE O ZERO**</marquee></h2><span class=badge> * Tutorial Externo</span><br><br><div class=subtitulo><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class=links><a>Conheça os fundamentos</a></div></article>";
+  conteudo += "<article " + pisca(x) + " onclick=\"location.href='https://RodrigoSchioMuniz.github.io/perceptron';\" class='card'><h2><marquee>Programado uma IA **DESDE O ZERO**</marquee></h2><span class=badge> * Tutorial Externo</span><br><br><div class=subtitulo><a>Inteligência Artficial desde o zero</a></div>Um tutorial sobre machine learning com códigos e conceitos sobre criação de inteligência artificial<br><br><div class='links'><a>Conheça os fundamentos</a></div></article>";
 
   conteudo += "<h3>Indo Além do Source Code</h3>";
   for (x = 0; x < procedimentos.length; x++) {
@@ -119,7 +119,7 @@ function subtitulo(x) {
 }
 
 function botoes(x) {
-  return "<br><br><div class=links><a>" + procedimentos[x][3] + "</a> &nbsp; <a>" + procedimentos[x][1] + "</a></div>";
+  return "<br><br><div class='links'><a>" + procedimentos[x][3] + "</a> &nbsp; <a>" + procedimentos[x][1] + "</a></div>";
 }
 
 function cardprocedimento(x) {
